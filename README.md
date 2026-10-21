@@ -1,153 +1,170 @@
 # mcp-singapore
 
-Serveur MCP TypeScript pour explorer les données publiques de **Singapour**, dans le même esprit que `mcp-reunion` : outils spécialisés, recherche de catalogue et accès générique aux données.
+A TypeScript MCP server for Singapore public data: specialized tools, catalog discovery, official statistics, real-time feeds, and controlled dataset exports. Uses the `stdio` transport and requires Node.js 22.12 or later.
 
 <!-- coverage-summary:start -->
-**64 outils · 22 jeux spécialisés · 4664 datasets · 74 agences.** Snapshot : 2026-10-21.
+**64 tools · 22 specialized datasets · 4664 datasets · 74 agencies.** Snapshot: 2026-10-21.
 <!-- coverage-summary:end -->
 
-L’index embarqué couvre le catalogue data.gov.sg. Il contient des métadonnées, pas une copie de toutes les observations. Les lignes sont lues à la demande ; les formats non tabulaires utilisent des exports contrôlés. Voir les limites et périodes dans COVERAGE.md.
+The bundled index contains dataset metadata, not a copy of every observation. Records are retrieved on demand. Coverage dates, update frequency, formats, and definitions vary by provider. See [COVERAGE.md](COVERAGE.md) for the generated inventory.
 
-## Données accessibles
+## Data coverage
 
-| Domaine | Accès |
+| Domain | Available data |
 |---|---|
-| Logement | Transactions HDB depuis 2017, locations, loyers médians, indices de prix privés, population HDB |
-| Entreprises | Registre UEN/ACRA ; partitions détaillées ACRA accessibles par catalogue et collections |
-| Éducation | Annuaire des écoles ; autres statistiques via catalogue et SingStat |
-| Alimentation | Hawker centres et dates de fermeture |
-| Santé | Bulletin des maladies infectieuses, aides et dispositifs de santé |
-| Culture et sport | Fréquentation des musées, équipements sportifs |
-| Tourisme | Arrivées de visiteurs et statistiques hôtelières |
-| Environnement | Recyclage, émissions de gaz à effet de serre, qualité de l'air annuelle |
-| Météo et pollution | Température, pluie, humidité, vitesse/direction du vent ; prévisions 2 h / 24 h / 4 jours ; PSI, PM2.5, UV |
-| Transport public | Positions des taxis disponibles, places de parking, caméras ; bus et autres flux LTA avec clé |
-| Géographie | Superficie, adresses et géocodage inverse OneMap avec jeton ; couches géographiques via catalogue/export |
-| Économie et société | Chômage, dépenses publiques ; recherche et lecture des tables SingStat |
-| Comparaisons internationales | Indicateurs Banque mondiale pour Singapour et jusqu'à cinq pays comparés |
+| Housing | HDB resale transactions since 2017, rentals, median rents, private property indices, HDB population |
+| Business | UEN/ACRA entity registry and detailed alphabetical ACRA partitions |
+| Education | School directory, preschool locations, catalog and SingStat education statistics |
+| Food | Hawker centres and closure dates |
+| Health | Infectious disease bulletins and healthcare schemes |
+| Culture and sports | Museum attendance and sports facilities |
+| Tourism | Visitor arrivals and hotel statistics |
+| Environment | Recycling, greenhouse gas emissions, annual air quality |
+| Weather | Temperature, rain, humidity, wind, 2-hour/24-hour/four-day forecasts, PSI, PM2.5, UV |
+| Transport | Available taxis, parking spaces, traffic cameras; authenticated LTA bus and traffic feeds |
+| Geography | OneMap geocoding, geographic exports, nearby facilities, SVY21/WGS84 conversion |
+| Economy and society | Unemployment, government spending, SingStat tables |
+| International comparisons | World Bank indicators for Singapore and up to five comparison countries |
 
-Le catalogue couvre aussi les recensements, revenus, commerce, énergie, CPF, urbanisme, infrastructures et de nombreux autres sujets. La période, la fraîcheur et les définitions dépendent de chaque jeu : un jeu historique n'est pas présenté comme une mesure actuelle.
+The full catalog also covers census data, incomes, trade, energy, CPF, infrastructure, urban planning, and other topics. Historical observations are not presented as current measurements.
 
-## Installation locale
+## Install from source
 
-```bash
+```sh
 git clone https://github.com/Hug0x0/mcp-singapore.git
 cd mcp-singapore
 npm ci
 npm run build
 npm test
-npm run test:smoke
 ```
 
-Configuration d'un client MCP compatible `stdio` :
+Configure a compatible MCP client with an absolute path to the cloned project:
 
 ```json
 {
   "mcpServers": {
     "singapore": {
       "command": "node",
-      "args": ["/chemin/absolu/vers/mcp-singapore/dist/index.js"]
+      "args": ["/absolute/path/to/mcp-singapore/dist/index.js"]
     }
   }
 }
 ```
 
-Remplacer le chemin ci-dessus par le chemin absolu du projet cloné. Le code source est disponible sur [GitHub](https://github.com/Hug0x0/mcp-singapore). Le nom npm `@hug0x0/mcp-singapore` figure dans le manifeste, mais la publication n'est pas effectuée : utiliser la configuration locale ci-dessus.
+The package name is `@hug0x0/mcp-singapore`. Publication to npm has not been performed; use the source installation until a published version is explicitly verified.
 
-## Clés facultatives et accès authentifiés
+## Credentials
 
-Les outils publics data.gov.sg, SingStat et Banque mondiale ont été prévus pour fonctionner sans clé, sous réserve des quotas du fournisseur. Une clé data.gov.sg est recommandée en production. LTA et OneMap nécessitent leurs propres identifiants.
+Public data.gov.sg, SingStat, and World Bank endpoints support public exploration subject to provider quotas. A data.gov.sg API key is recommended for production use. LTA and OneMap require their own credentials.
 
-| Variable | Rôle |
+| Environment variable | Purpose |
 |---|---|
-| `DATA_GOV_SG_API_KEY` | Clé data.gov.sg, envoyée dans `x-api-key` |
-| `LTA_ACCOUNT_KEY` | Clé DataMall, pour les arrivées de bus et `singapore_query_lta` |
-| `ONEMAP_TOKEN` | Jeton OneMap, pour chercher une adresse et le géocodage inverse |
+| `DATA_GOV_SG_API_KEY` | Optional data.gov.sg key, sent in `x-api-key` |
+| `LTA_ACCOUNT_KEY` | Required for LTA DataMall bus arrivals and other LTA tools |
+| `ONEMAP_TOKEN` | Required for OneMap address search and reverse geocoding |
 
-Passer ces variables dans `env` de la configuration MCP ou dans l'environnement du processus. Le fichier `.env.example` est un modèle ; le serveur ne charge pas automatiquement de fichier `.env`. Les secrets sont transmis uniquement dans les en-têtes HTTP, jamais dans les arguments des outils ou les URL.
+Set variables in the MCP client's `env` configuration or in the server process environment. `.env.example` is a template; the server does not automatically load `.env` files. Credentials are sent in request headers, never in tool arguments or request URLs.
 
 ```json
 {
   "mcpServers": {
     "singapore": {
       "command": "node",
-      "args": ["/chemin/absolu/vers/mcp-singapore/dist/index.js"],
+      "args": ["/absolute/path/to/mcp-singapore/dist/index.js"],
       "env": {
-        "DATA_GOV_SG_API_KEY": "votre-cle-data-gov-sg",
-        "LTA_ACCOUNT_KEY": "votre-cle-lta",
-        "ONEMAP_TOKEN": "votre-jeton-onemap"
+        "DATA_GOV_SG_API_KEY": "your-data-gov-sg-key",
+        "LTA_ACCOUNT_KEY": "your-lta-key",
+        "ONEMAP_TOKEN": "your-onemap-token"
       }
     }
   }
 }
 ```
 
-Créer les accès auprès de [data.gov.sg](https://guide.data.gov.sg/developer-guide/api-overview/how-to-request-an-api-key), [LTA DataMall](https://datamall.lta.gov.sg/) et [OneMap](https://www.onemap.gov.sg/apidocs/). Ne renseigner que les variables des services utilisés. Le renouvellement d'un jeton OneMap expiré se fait auprès du fournisseur.
+Request credentials from [data.gov.sg](https://guide.data.gov.sg/developer-guide/api-overview/how-to-request-an-api-key), [LTA DataMall](https://datamall.lta.gov.sg/), and [OneMap](https://www.onemap.gov.sg/apidocs/). Configure only the services you use. Renew expired OneMap tokens with the provider.
 
-## Workflow de recherche
+## Research workflow
 
-1. `singapore_find_relevant_tools` comprend des mots-clés français ou anglais et suggère des outils.
-2. `singapore_search_catalog` recherche localement dans l'index complet, avec filtre d'agence et de format. Utiliser des mots-clés anglais pour les titres des jeux.
-3. `singapore_inspect_dataset` retourne les métadonnées à jour et les noms de colonnes.
-4. `singapore_query_dataset` lit les lignes avec filtres, recherche par colonne, tri, projection et pagination.
-5. `singapore_download_dataset` permet d'initier puis de consulter un export si Datastore ne convient pas.
+1. Use `singapore_find_relevant_tools` to route an English question to relevant tools.
+2. Use `singapore_search_catalog` to search the bundled index by English keywords, agency, format, status, and coverage.
+3. Use `singapore_inspect_dataset` to inspect current metadata and normalized field names. Field metadata is paginated; `include_raw` includes the original column mapping.
+4. Use `singapore_query_dataset` or a specialized tool to retrieve records with filters, field searches, sorting, projection, and pagination.
+5. Use `singapore_download_dataset` to initiate and poll an export when Datastore does not support the dataset.
+
+Example catalog query:
 
 ```json
 {"query":"resale flat prices","limit":5}
 ```
 
-Puis `singapore_query_hdb_resale` :
+Then query `singapore_query_hdb_resale`:
 
 ```json
 {"filters":{"town":"ANG MO KIO","flat_type":"4 ROOM"},"sort":"month desc","limit":10,"offset":0}
 ```
 
-Les filtres sont des égalités exactes, sensibles à la représentation de la source. La recherche `q` est un objet de recherche par colonne, par exemple `{"school_name":"RAFFLES"}`. Inspecter les champs avant de les utiliser. Les valeurs numériques peuvent être des chaînes ; les marqueurs de valeurs manquantes sont conservés.
+Filters use exact equality and preserve the provider's representation. Column search uses an object such as `{"school_name":"RAFFLES"}`. Inspect field names first. Numeric values may be strings; missing-value markers are preserved.
 
-Pour SingStat : `singapore_search_statistics({"query":"population"})`, puis `singapore_inspect_statistics({"resource_id":"M810001"})` et `singapore_get_statistics({"resource_id":"M810001","series_contains":"Total Population","period_limit":5})`. Le filtrage des séries et la limite de périodes sont locaux, après lecture de la table ; `period` peut limiter en amont à une période exacte. Les dernières périodes désignent l'ordre fourni par SingStat.
+For SingStat, search `{"query":"population"}`, inspect resource `M810001`, then call `singapore_get_statistics` with `{"resource_id":"M810001","series_contains":"Total Population","period_limit":5}`. Series and period filtering occur locally after table retrieval; `period` can restrict the upstream request to an exact period.
 
-## Outils et ressources
+## Analysis and nearby searches
 
-La liste complète et les jeux spécialisés sont documentés dans [COVERAGE.md](COVERAGE.md).
+`singapore_compare_hdb_prices` scans the complete official CSV export before calculating medians, quartiles, and prices per square metre. It reports exclusions and coverage rather than extrapolating from a single page.
 
-Ressources : `singapore://sources`, `singapore://coverage`, `singapore://usage`, `singapore://topics`.
+`singapore_find_nearby_facilities` supports HDB carparks with live availability, hawker centres, preschools, park facilities, and sports facilities. Unsupported geometries and missing coordinates are counted. Preschool coverage does not include primary or secondary schools.
 
-Prompt : `research-singapore` avec l'argument `question`.
+`singapore_convert_coordinates` converts SVY21 easting/northing to WGS84 longitude/latitude and back within supported Singapore bounds.
 
-Réponses : `served_at` indique l'heure d'émission MCP, `source_url` la requête source, `data` les résultats. Les dates d'observation/mise à jour du fournisseur et la date de l'index font référence pour la fraîcheur. Les caches sont locaux au processus : 30–60 s pour le transport, 60 s pour météo/Datastore, jusqu'à 1 h pour métadonnées/statistiques. Aucun service de télémétrie.
+## MCP resources and results
 
-Le serveur limite les tailles de page, conserve les marqueurs de pagination et limite chaque réponse HTTP à 8 Mio. Les requêtes Datastore, météo et exports sont espacées pour respecter les quotas publics usuels ; les erreurs 429 et `Retry-After` sont gérées. Les origines réseau sont fixes et les redirections refusées.
+Resources: `singapore://sources`, `singapore://coverage`, `singapore://usage`, `singapore://topics`.
 
-## Maintenance et validation
+Prompt: `research-singapore`, with a `question` argument.
 
-```bash
-npm run refresh:catalog       # renouvelle l'index complet, ~467 pages lors de la création
+Results contain `ok`, `served_at`, `data`, and `sources`, in both `structuredContent` and JSON text. `served_at` is the response emission time; HTTP provenance includes actual `fetched_at`, cache use, and cache age. Provider observation and update timestamps remain authoritative for the data itself.
+
+The server bounds page sizes, request queues, output size, HTTP responses, and caches. It preserves continuation parameters and rejects oversized outputs explicitly. Requests use fixed provider origins and reject redirects. Credentials and request bodies are not sent to telemetry services.
+
+## Maintenance and verification
+
+```sh
 npm run build
-npm test                      # tests locaux sans accès réseau
-npm run test:smoke            # vérification réelle des principaux services publics
-npm run test:smoke -- --all   # vérifie aussi les 22 jeux spécialisés et les flux météo/transport publics
+npm test
+npm run docs:generate
+npm run docs:check
+npm run check:schema
+npm run test:smoke
+npm run test:smoke -- --all
+npm run test:smoke -- --mode=auth
+npm run test:package
 npm audit
-npm pack --dry-run
+npm run refresh:catalog
 ```
 
-Le script de renouvellement remplace l'index seulement après la réussite de toutes les pages. Une mise à jour peut modifier les effectifs et les schémas ; vérifier les outils spécialisés ensuite. Les nouveaux datasets sont accessibles en direct par `singapore_list_catalog_page`, même avant renouvellement de l'index local.
+Live verification is separate from ordinary pull-request tests. Authenticated checks are explicitly skipped when credentials are absent. The latest report is in [docs/live-verification.json](docs/live-verification.json). Successful checks do not guarantee future provider availability.
 
-Les résultats de la dernière vérification réseau sont dans [docs/live-verification.json](docs/live-verification.json). Une réussite ne garantit pas la disponibilité future d'une API. Les parcours authentifiés LTA et OneMap nécessitent des identifiants pour une validation réelle.
+Catalog refresh validates complete pagination, dataset integrity, and required fields before replacing the index. Manual workflows provide catalog refresh proposals and provider verification artifacts. The source catalog and provider responses can change independently of this server.
+
+## Documentation
+
+- [Configuration and output contracts](docs/configuration.md)
+- [Provider contracts and query behavior](docs/provider-contracts.md)
+- [Analysis and geography](docs/analysis-and-geography.md)
+- [Maintenance](docs/maintenance.md)
+- [Release process](docs/release.md)
+- [Implementation record](docs/issue-implementation.md)
+- [Follow-up improvement backlog](docs/follow-up-backlog.md)
+- [Contributing](CONTRIBUTING.md)
+- [Changelog](CHANGELOG.md)
 
 ## Sources
 
-- [data.gov.sg : documentation développeur](https://guide.data.gov.sg/developer-guide)
-- [SingStat : API développeur](https://tablebuilder.singstat.gov.sg/view-api/for-developers/test)
-- [LTA : guide API](https://datamall.lta.gov.sg/content/dam/datamall/datasets/LTA_DataMall_API_User_Guide.pdf)
-- [OneMap : documentation](https://www.onemap.gov.sg/apidocs/)
-- [Banque mondiale : API](https://datahelpdesk.worldbank.org/knowledgebase/topics/125589-developer-information)
+- [data.gov.sg developer documentation](https://guide.data.gov.sg/developer-guide)
+- [SingStat developer API](https://tablebuilder.singstat.gov.sg/view-api/for-developers/test)
+- [LTA API guide](https://datamall.lta.gov.sg/content/dam/datamall/datasets/LTA_DataMall_API_User_Guide.pdf)
+- [OneMap documentation](https://www.onemap.gov.sg/apidocs/)
+- [World Bank API documentation](https://datahelpdesk.worldbank.org/knowledgebase/topics/125589-developer-information)
 
-## Licence
+## License
 
-Code : MIT. Structure inspirée des MCP existants de Hug0x0, dont `mcp-reunion`. Les données restent soumises aux conditions de leurs fournisseurs ; conserver leurs attributions et consulter les métadonnées du jeu utilisé. [Singapore Open Data Licence](https://data.gov.sg/open-data-license).
-
-## Améliorations 0.2
-
-Les nouveaux outils comprennent le diagnostic des capacités, la résolution locale d’un ID, les collections, ACRA détaillé, les stations météo, les arrêts proches, la conversion de coordonnées, les équipements proches et les comparaisons HDB sur export complet.
-
-Documentation : [configuration](docs/configuration.md), [contrats fournisseurs](docs/provider-contracts.md), [analyse et géographie](docs/analysis-and-geography.md), [maintenance](docs/maintenance.md), [publication](docs/release.md), [contributions](CONTRIBUTING.md), [changelog](CHANGELOG.md). Les parcours nécessitant des identifiants restent explicitement non vérifiés en conditions réelles sans ces identifiants.
+MIT for the server code. Data remains subject to its providers' terms and attribution requirements. See the [Singapore Open Data Licence](https://data.gov.sg/open-data-license) and individual dataset metadata.

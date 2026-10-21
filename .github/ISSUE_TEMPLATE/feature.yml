@@ -1,17 +1,17 @@
-name: Amélioration
-description: Proposer une capacité ou une nouvelle source
+name: Feature request
+description: Propose a capability or a new data source
 labels: [enhancement]
 body:
   - type: textarea
     id: need
     attributes:
-      label: Besoin utilisateur et exemple de question
+      label: User need and example question
     validations:
       required: true
   - type: textarea
     id: scope
     attributes:
-      label: Périmètre, source officielle et critères de réussite
-      description: Préciser la pagination, les unités, les identifiants nécessaires et les limites connues.
+      label: Scope, official source, and acceptance criteria
+      description: Specify pagination, units, credential requirements, and known limitations.
     validations:
       required: true

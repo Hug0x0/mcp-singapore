@@ -1,16 +1,20 @@
 # Changelog
 
+## Unreleased
+
+- Standardize all repository documentation, generated text, examples, issue templates, query keywords, and maintainer-authored issue content on English.
+
 ## 0.2.0
 
-- Réponses MCP structurées, validation fournisseurs, erreurs identifiables, provenance HTTP et cache borné.
-- Configuration des budgets, annulation, délais et débits explicites.
-- Recherche bilingue, filtres de couverture, schémas normalisés, collections et ACRA détaillé.
-- Périodes SingStat ordonnées et filtrées ; plages World Bank validées.
-- Stations et filtres météo, pagination transport, paramètres LTA et tests de contrat OneMap/LTA.
-- Recherche d'équipements et parkings proches ; conversion SVY21/WGS84 ; agrégations HDB sur export complet.
-- Exports contrôlés, maintenance du catalogue, rapports réseau fiables et documentation générée.
-- Vérification de l'archive npm installée, guide de contribution et workflows manuels.
+- Structured MCP results, provider validation, actionable errors, HTTP provenance, and bounded caching.
+- Configurable budgets, cancellation, deadlines, and explicit request rates.
+- Catalog discovery, coverage filters, normalized schemas, collections, and detailed ACRA search.
+- Ordered and filtered SingStat periods and validated World Bank year ranges.
+- Weather stations and filters, transport pagination, LTA parameters, and OneMap/LTA contract tests.
+- Nearby facilities and carparks, SVY21/WGS84 conversion, and complete-export HDB aggregates.
+- Controlled exports, catalog maintenance, accurate verification reports, and generated documentation.
+- Isolated npm package installation checks, contribution guidance, and manual workflows.
 
 ## 0.1.0
 
-- Première version locale : 55 outils, catalogue de 4 664 datasets et 22 accès spécialisés.
+- Initial local server with 55 tools, a 4,664-dataset catalog, and 22 specialized datasets.
