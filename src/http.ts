@@ -14,7 +14,7 @@ export function retryDelay(header: string|null, now=Date.now()): number {
   if(!header)return 10;const n=/^\d+$/.test(header)?Number(header):Math.ceil((Date.parse(header)-now)/1000);return Number.isFinite(n)?Math.max(0,n):10;
 }
 export class HttpClient {
-  private cache=new Map<string,Cached>();private pending=new Map<string,Promise<Cached>>();private nextRequest=new Map<string,number>();private queued=0;private hits=0;private misses=0;
+  private cache=new Map<string,Cached>();private pending=new Map<string,Promise<Cached>>();private nextRequest=new Map<string,number>();private signalIds=new WeakMap<AbortSignal,number>();private signalCounter=0;private queued=0;private hits=0;private misses=0;
   constructor(private readonly fetcher:typeof fetch=fetch,private readonly timeoutMs=config.timeoutMs) {}
   clearCache(){this.cache.clear();}
   cacheStats(){this.purge();return{entries:this.cache.size,bytes:[...this.cache.values()].reduce((s,c)=>s+c.bytes,0),hits:this.hits,misses:this.misses};}
@@ -23,8 +23,9 @@ export class HttpClient {
     const target=new URL(input);if(target.protocol!=='https:'||!HOSTS.has(target.hostname)||target.username||target.password||(target.port&&target.port!=='443'))throw new ApiError('Unsupported API origin',400,undefined,'INVALID_ARGUMENT');
     this.purge();const key=JSON.stringify([target.href,options.headers??{}]);const cached=this.cache.get(key);let entry:Cached;let hit=false;
     if(cached){entry=cached;hit=true;this.hits++;}else{
-      let operation=this.pending.get(key);
-      if(!operation){this.misses++;operation=this.request(target,options).then(e=>{const ttl=config.cacheTtlMs??options.ttlMs??0;if(ttl>0&&e.bytes<=config.cacheBytes){e.expires=Date.now()+ttl;this.cache.set(key,e);while(this.cache.size>config.cacheEntries||this.cacheStats().bytes>config.cacheBytes)this.cache.delete(this.cache.keys().next().value!);}return e;}).finally(()=>this.pending.delete(key));this.pending.set(key,operation);}
+      const caller=options.signal??requestContext.getStore()?.signal;if(caller&&!this.signalIds.has(caller))this.signalIds.set(caller,++this.signalCounter);const pendingKey=key+(caller?':signal:'+this.signalIds.get(caller):'');
+      let operation=this.pending.get(pendingKey);
+      if(!operation){this.misses++;operation=this.request(target,options).then(e=>{const ttl=config.cacheTtlMs??options.ttlMs??0;if(ttl>0&&e.bytes<=config.cacheBytes){e.expires=Date.now()+ttl;this.cache.set(key,e);while(this.cache.size>config.cacheEntries||this.cacheStats().bytes>config.cacheBytes)this.cache.delete(this.cache.keys().next().value!);}return e;}).finally(()=>this.pending.delete(pendingKey));this.pending.set(pendingKey,operation);}
       entry=await operation;
     }
     recordSource({source_url:target.href,fetched_at:new Date(entry.fetched).toISOString(),cache_hit:hit,age_seconds:Math.max(0,(Date.now()-entry.fetched)/1000)});return entry.value as T;
