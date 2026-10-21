@@ -15,6 +15,6 @@ Write documentation, code comments, examples, tool descriptions, issues, and pul
 
 Provider fixtures must be synthetic or sanitized and contain no API keys, tokens, or signed download URLs. Pull-request tests stay local; real provider checks use the manual verification workflow and its pass/fail/skipped/pending report.
 
-Register new tools through addTool, declare bounded arguments, describe coverage and pagination, and register the module in createServer. Compile and regenerate the manifest and COVERAGE. Specialized datasets require verified provider metadata and schema expectations.
+Register new tools through addTool, declare bounded arguments, describe coverage and pagination, and register the module in createServer. Compile and regenerate the manifest and COVERAGE. Specialized datasets require verified provider metadata and schema expectations. Dataset reference pages are generated from the pinned selection and catalog: update the source metadata or generator, then run `npm run docs:generate`; avoid editing generated pages directly.
 
 Use `trash` rather than permanent local file deletion. Package-test temporary directories are moved to the trash when supported or left to the ephemeral runner lifecycle.

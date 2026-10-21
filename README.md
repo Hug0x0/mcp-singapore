@@ -28,6 +28,10 @@ The bundled index contains dataset metadata, not a copy of every observation. Re
 
 The full catalog also covers census data, incomes, trade, energy, CPF, infrastructure, urban planning, and other topics. Historical observations are not presented as current measurements.
 
+## Dataset reference library
+
+Browse [288 dataset guides across 74 agencies](docs/datasets/README.md) for publisher descriptions, snapshot coverage, source links, and schema-validated MCP request examples. The selection includes all 22 specialized datasets. Guides describe discovery and access; live data availability must be checked with the provider.
+
 ## Install from source
 
 ```sh
