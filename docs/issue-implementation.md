@@ -2,7 +2,7 @@
 
 Chaque issue est reliée ci-dessous à son lot de réalisation. Les références de commit désignent les premiers changements du lot ; les ajustements de pagination et de validation figurent aussi dans les commits suivants.
 
-Validation finale locale : 48 tests ; 54 contrôles réseau réussis, 4 parcours authentifiés explicitement ignorés sans clés ; archive npm installée dans un dossier isolé. La CI exécute Node 22 et 24. Les tests de contrat LTA/OneMap utilisent des fixtures synthétiques ; aucune validation réelle authentifiée n’est revendiquée. La publication npm reste une étape explicite documentée.
+Validation finale locale : 50 tests ; 54 contrôles réseau réussis, 4 parcours authentifiés explicitement ignorés sans clés ; archive npm installée dans un dossier isolé. La CI exécute Node 22 et 24. Les tests de contrat LTA/OneMap utilisent des fixtures synthétiques ; aucune validation réelle authentifiée n’est revendiquée. La publication npm reste une étape explicite documentée.
 
 | Issue | Réalisation | Référence |
 |---|---|---|
