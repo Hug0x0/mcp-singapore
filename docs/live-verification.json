@@ -1,0 +1,237 @@
+{
+  "tested_at": "2026-10-21T15:25:00.915Z",
+  "mode": "all-public",
+  "results": [
+    {
+      "tool": "singapore_search_catalog",
+      "status": "pass",
+      "duration_ms": 13
+    },
+    {
+      "tool": "singapore_inspect_dataset",
+      "status": "pass",
+      "duration_ms": 535
+    },
+    {
+      "tool": "singapore_query_hdb_resale",
+      "status": "pass",
+      "duration_ms": 990
+    },
+    {
+      "tool": "singapore_get_air_temperature",
+      "status": "pass",
+      "duration_ms": 244
+    },
+    {
+      "tool": "singapore_get_forecast_2h",
+      "status": "pass",
+      "duration_ms": 1774
+    },
+    {
+      "tool": "singapore_search_statistics",
+      "status": "pass",
+      "duration_ms": 11268
+    },
+    {
+      "tool": "singapore_get_statistics",
+      "status": "pass",
+      "duration_ms": 320
+    },
+    {
+      "tool": "singapore_get_indicator",
+      "status": "pass",
+      "duration_ms": 5990
+    },
+    {
+      "tool": "singapore_query_hdb_rentals",
+      "status": "pass",
+      "duration_ms": 875
+    },
+    {
+      "tool": "singapore_query_hdb_median_rent",
+      "status": "pass",
+      "duration_ms": 2769
+    },
+    {
+      "tool": "singapore_query_carpark_directory",
+      "status": "pass",
+      "duration_ms": 2600
+    },
+    {
+      "tool": "singapore_query_schools",
+      "status": "pass",
+      "duration_ms": 2810
+    },
+    {
+      "tool": "singapore_query_hawker_centres",
+      "status": "pass",
+      "duration_ms": 2572
+    },
+    {
+      "tool": "singapore_query_hawker_closures",
+      "status": "pass",
+      "duration_ms": 2709
+    },
+    {
+      "tool": "singapore_query_businesses",
+      "status": "pass",
+      "duration_ms": 2696
+    },
+    {
+      "tool": "singapore_query_infectious_diseases",
+      "status": "pass",
+      "duration_ms": 2730
+    },
+    {
+      "tool": "singapore_query_sport_facilities",
+      "status": "pass",
+      "duration_ms": 2826
+    },
+    {
+      "tool": "singapore_query_museum_visitors",
+      "status": "pass",
+      "duration_ms": 2544
+    },
+    {
+      "tool": "singapore_query_hotel_statistics",
+      "status": "pass",
+      "duration_ms": 2972
+    },
+    {
+      "tool": "singapore_query_visitor_arrivals",
+      "status": "pass",
+      "duration_ms": 2398
+    },
+    {
+      "tool": "singapore_query_recycling_rates",
+      "status": "pass",
+      "duration_ms": 2827
+    },
+    {
+      "tool": "singapore_query_air_quality_annual",
+      "status": "pass",
+      "duration_ms": 2629
+    },
+    {
+      "tool": "singapore_query_greenhouse_emissions",
+      "status": "pass",
+      "duration_ms": 2647
+    },
+    {
+      "tool": "singapore_query_government_expenditure",
+      "status": "pass",
+      "duration_ms": 2366
+    },
+    {
+      "tool": "singapore_query_land_area",
+      "status": "pass",
+      "duration_ms": 3100
+    },
+    {
+      "tool": "singapore_query_private_property_prices",
+      "status": "pass",
+      "duration_ms": 2651
+    },
+    {
+      "tool": "singapore_query_healthcare_schemes",
+      "status": "pass",
+      "duration_ms": 2742
+    },
+    {
+      "tool": "singapore_query_unemployment",
+      "status": "pass",
+      "duration_ms": 2652
+    },
+    {
+      "tool": "singapore_query_hdb_population",
+      "status": "pass",
+      "duration_ms": 2779
+    },
+    {
+      "tool": "singapore_get_rainfall",
+      "status": "pass",
+      "duration_ms": 331
+    },
+    {
+      "tool": "singapore_get_relative_humidity",
+      "status": "pass",
+      "duration_ms": 1673
+    },
+    {
+      "tool": "singapore_get_wind_speed",
+      "status": "pass",
+      "duration_ms": 1803
+    },
+    {
+      "tool": "singapore_get_wind_direction",
+      "status": "pass",
+      "duration_ms": 1802
+    },
+    {
+      "tool": "singapore_get_forecast_24h",
+      "status": "pass",
+      "duration_ms": 1835
+    },
+    {
+      "tool": "singapore_get_forecast_4day",
+      "status": "pass",
+      "duration_ms": 12060
+    },
+    {
+      "tool": "singapore_get_psi",
+      "status": "pass",
+      "duration_ms": 1759
+    },
+    {
+      "tool": "singapore_get_pm25",
+      "status": "pass",
+      "duration_ms": 1742
+    },
+    {
+      "tool": "singapore_get_uv_index",
+      "status": "pass",
+      "duration_ms": 1796
+    },
+    {
+      "tool": "singapore_get_taxi_availability",
+      "status": "pass",
+      "duration_ms": 2454
+    },
+    {
+      "tool": "singapore_get_carpark_availability",
+      "status": "pass",
+      "duration_ms": 2911
+    },
+    {
+      "tool": "singapore_get_traffic_images",
+      "status": "pass",
+      "duration_ms": 419
+    },
+    {
+      "tool": "singapore_get_collection",
+      "status": "pass",
+      "duration_ms": 354
+    },
+    {
+      "tool": "singapore_list_catalog_page",
+      "status": "pass",
+      "duration_ms": 404
+    },
+    {
+      "tool": "singapore_download_dataset",
+      "action": "initiate",
+      "status": "pass",
+      "tested_at": "2026-10-21T15:26:44.820Z"
+    },
+    {
+      "tool": "singapore_download_dataset",
+      "action": "poll",
+      "status": "pass",
+      "tested_at": "2026-10-21T15:26:50.264Z"
+    }
+  ],
+  "untested": [
+    "LTA DataMall (requires LTA_ACCOUNT_KEY)",
+    "OneMap (requires ONEMAP_TOKEN)"
+  ]
+}

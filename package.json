@@ -1,0 +1,65 @@
+{
+  "name": "@hug0x0/mcp-singapore",
+  "version": "0.1.0",
+  "description": "Singapore public data MCP: data.gov.sg catalog, HDB, weather, transport, SingStat, OneMap and World Bank.",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "mcp-singapore": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "data",
+    "README.md",
+    "LICENSE",
+    "docs",
+    "examples",
+    "COVERAGE.md",
+    "scripts"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "postbuild": "chmod +x dist/index.js",
+    "start": "node dist/index.js",
+    "dev": "tsx src/index.ts",
+    "test": "node --import tsx --test tests/*.test.ts",
+    "test:smoke": "node scripts/smoke-test.mjs",
+    "refresh:catalog": "node scripts/refresh-catalog.mjs",
+    "prepack": "npm run build",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "keywords": [
+    "mcp",
+    "singapore",
+    "open-data",
+    "hdb",
+    "singstat",
+    "data-gov-sg"
+  ],
+  "author": "Hug0x0",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.1",
+    "zod": "4.6.5"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.2",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hug0x0/mcp-singapore.git"
+  },
+  "homepage": "https://github.com/Hug0x0/mcp-singapore#readme",
+  "bugs": {
+    "url": "https://github.com/Hug0x0/mcp-singapore/issues"
+  }
+}

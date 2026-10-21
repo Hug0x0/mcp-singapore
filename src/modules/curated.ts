@@ -1,0 +1,15 @@
+import { readFile } from 'node:fs/promises';
+import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { z } from 'zod';
+import { addTool } from '../tools.js';
+import { queryDataset, snapshot } from '../clients/datagov.js';
+import { queryShape } from './catalog.js';
+import type { Dataset } from '../types.js';
+export const curated: (Dataset & { key: string; topic: string })[] = JSON.parse(await readFile(new URL('../../data/curated.json', import.meta.url), 'utf8'));
+export function registerCurated(server: McpServer) {
+  addTool(server, 'singapore_list_curated_datasets', 'Browse curated datasets and tool names by topic. Includes coverage dates: some series are historical. The full catalog is searchable separately.', { topic: z.string().max(100).optional() }, ({ topic }) => ({ source_url: snapshot.source, catalog_snapshot_at: snapshot.retrieved_at, data: curated.filter(d => !topic || d.topic.includes(topic)).map(d => ({ ...d, tool: `singapore_query_${d.key}` })) }));
+  for (const dataset of curated) {
+    const { dataset_id: unused, ...shape } = queryShape;
+    addTool(server, `singapore_query_${dataset.key}`, `Query ${dataset.title} (${dataset.agency}). Topic: ${dataset.topic}. Inspect dataset ${dataset.dataset_id} first for filter fields. Supports exact filters, column text search, fields, sort and pagination. Returns source coverage from the bundled catalog; fetch metadata for current coverage.`, shape, async (args) => ({ ...await queryDataset({ ...args, dataset_id: dataset.dataset_id }), catalog_metadata: dataset }));
+  }
+}
