@@ -1,25 +1,20 @@
-import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { z } from 'zod';
-import { addTool, dateSchema } from '../tools.js';
-import { http, url, dataGovHeaders } from '../http.js';
-export const weatherFeeds = [
-  ['air_temperature', 'air-temperature', 'NEA air temperature observations by station (degrees Celsius)'],
-  ['rainfall', 'rainfall', 'NEA rainfall observations by station (mm)'],
-  ['relative_humidity', 'relative-humidity', 'NEA relative humidity by station (%)'],
-  ['wind_speed', 'wind-speed', 'NEA wind speed by station (knots, preserve upstream units)'],
-  ['wind_direction', 'wind-direction', 'NEA wind direction by station (degrees)'],
-  ['forecast_2h', 'two-hr-forecast', 'NEA 2-hour forecast by area, with validity period'],
-  ['forecast_24h', 'twenty-four-hr-forecast', 'NEA 24-hour forecast with temperature, humidity, wind and regional outlook'],
-  ['forecast_4day', 'four-day-outlook', 'NEA four-day weather outlook'],
-  ['psi', 'psi', 'NEA Pollutant Standards Index and pollutant concentrations by region'],
-  ['pm25', 'pm25', 'NEA fine particulate matter PM2.5 by region (micrograms per cubic metre)'],
-  ['uv_index', 'uv', 'NEA UV index readings'],
-] as const;
-export function registerRealtime(server: McpServer) {
-  for (const [name, endpoint, description] of weatherFeeds) {
-    addTool(server, `singapore_get_${name}`, `${description}. Latest if date omitted. Dates are Singapore local time. Returns upstream timestamps, metadata and pagination token; forward paginationToken to retrieve more history.`, { date: dateSchema, pagination_token: z.string().max(2000).optional() }, async ({ date, pagination_token }) => {
-      const target = url(`https://api-open.data.gov.sg/v2/real-time/api/${endpoint}`, { date, paginationToken: pagination_token });
-      return { source_url: target.href, data: (await http.get<{ data: unknown }>(target, { headers: dataGovHeaders(), ttlMs: 60000, intervalMs: 1800, rateGroup: 'realtime' })).data };
-    });
+import type{McpServer}from'@modelcontextprotocol/sdk/server/mcp.js';import{z}from'zod';import{addTool,dateSchema,limitSchema,offsetSchema,pagination,normalize}from'../tools.js';import{http,url,dataGovHeaders}from'../http.js';import type{Row}from'../types.js';
+export const weatherFeeds=[['air_temperature','air-temperature','NEA temperature (degrees Celsius)'],['rainfall','rainfall','NEA rainfall (mm)'],['relative_humidity','relative-humidity','NEA humidity (%)'],['wind_speed','wind-speed','NEA wind speed (knots)'],['wind_direction','wind-direction','NEA wind direction (degrees)'],['forecast_2h','two-hr-forecast','NEA 2-hour area forecasts'],['forecast_24h','twenty-four-hr-forecast','NEA 24-hour weather forecast'],['forecast_4day','four-day-outlook','NEA four-day outlook'],['psi','psi','NEA PSI and pollutants by region'],['pm25','pm25','NEA PM2.5 (micrograms per cubic metre)'],['uv_index','uv','NEA UV index']]as const;
+export interface WeatherFilter{station_id?:string;area?:string;region?:string;limit:number;offset:number}
+function regional(value:unknown,region:string):unknown{if(Array.isArray(value))return value.map(v=>regional(v,region));if(value&&typeof value==='object'){const obj=value as Row;const keys=Object.keys(obj);if(keys.length&&keys.every(k=>['north','south','east','west','central','national'].includes(k)))return region in obj?{[region]:obj[region]}:{};return Object.fromEntries(Object.entries(obj).map(([k,v])=>[k,regional(v,region)]));}return value;}
+export function filterWeather(data:Row,filter:WeatherFilter):Row{
+  const out={...data};
+  if(Array.isArray(data.stations))out.stations=data.stations.filter((s:Row)=>!filter.station_id||s.id===filter.station_id);
+  for(const key of ['regionMetadata','region_metadata'])if(Array.isArray(data[key]))out[key]=(data[key] as Row[]).filter(s=>!filter.region||s.name===filter.region);
+  if(Array.isArray(data.area_metadata))out.area_metadata=data.area_metadata.filter((r:Row)=>!filter.area||normalize(String(r.name))===normalize(filter.area));
+  const key=['readings','items','records'].find(k=>Array.isArray(data[k]));
+  if(key){let rows=(data[key] as Row[]).map(r=>({...r,...(Array.isArray(r.data)?{data:r.data.filter((v:Row)=>!filter.station_id||v.stationId===filter.station_id)}:{}),...(Array.isArray(r.forecasts)?{forecasts:r.forecasts.filter((v:Row)=>!filter.area||normalize(String(v.area))===normalize(filter.area))}:{})}));
+    if(filter.region)rows=rows.map(r=>regional(r,filter.region!)as Row);
+    out[key]=rows.slice(filter.offset,filter.offset+filter.limit);out.pagination={...pagination(rows.length,filter.offset,(out[key]as unknown[]).length),offset:filter.offset,upstream_pagination_token:data.paginationToken??null,scope:'local page; continue local offsets before passing the upstream token'};
   }
+  return out;
+}
+export function registerRealtime(server:McpServer){
+ for(const[name,endpoint,description]of weatherFeeds){addTool(server,`singapore_get_${name}`,`${description}. Singapore local dates; latest if omitted. Local limits apply to timestamp groups. Consume local offsets before continuing the preserved upstream pagination token.`,{date:dateSchema,pagination_token:z.string().max(2000).optional(),station_id:z.string().max(40).optional(),area:z.string().max(100).optional(),region:z.enum(['north','south','east','west','central','national']).optional(),limit:limitSchema,offset:offsetSchema},async({date,pagination_token,...filter})=>{const target=url(`https://api-open.data.gov.sg/v2/real-time/api/${endpoint}`,{date,paginationToken:pagination_token});const body=await http.get<{data:Row}>(target,{headers:dataGovHeaders(),ttlMs:60000,rateGroup:'realtime'});return{source_url:target.href,data:filterWeather(body.data,filter)};});}
+ addTool(server,'singapore_list_weather_stations','Discover weather stations, IDs and WGS84 coordinates by observed measure; search by ID/name. No observations omitted from a claimed national inventory.',{measure:z.enum(['air-temperature','rainfall','relative-humidity','wind-speed','wind-direction']).default('air-temperature'),query:z.string().max(100).default(''),limit:limitSchema,offset:offsetSchema},async({measure,query,limit,offset})=>{const target=`https://api-open.data.gov.sg/v2/real-time/api/${measure}`;const body=await http.get<{data:{stations:Row[]}}>(target,{headers:dataGovHeaders(),ttlMs:60000,rateGroup:'realtime'});const matches=body.data.stations.filter(s=>normalize(`${s.id} ${s.name}`).includes(normalize(query)));return{source_url:target,data:{stations:matches.slice(offset,offset+limit),total:matches.length,...pagination(matches.length,offset,Math.min(limit,Math.max(0,matches.length-offset)))}};});
 }

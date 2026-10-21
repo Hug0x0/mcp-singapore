@@ -1,0 +1,7 @@
+{
+  "lta_list":{"value":[{"BusStopCode":"01012","RoadName":"Test Road","Latitude":1.3,"Longitude":103.8}]},
+  "lta_arrival":{"BusStopCode":"01012","Services":[{"ServiceNo":"7","NextBus":{"EstimatedArrival":"2026-10-21T12:05:00+08:00","Load":"SEA","Feature":"WAB"},"NextBus2":{},"NextBus3":{}}]},
+  "lta_alert":{"value":{"Status":1,"AffectedSegments":[]}},
+  "onemap_search":{"found":1,"totalNumPages":1,"pageNum":1,"results":[{"ADDRESS":"SYNTHETIC TEST ADDRESS","POSTAL":"000001","LATITUDE":"1.3","LONGITUDE":"103.8"}]},
+  "onemap_reverse":{"GeocodeInfo":[{"BUILDINGNAME":"SYNTHETIC TEST BUILDING","LATITUDE":"1.3","LONGITUDE":"103.8"}]}
+}

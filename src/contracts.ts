@@ -15,7 +15,7 @@ export function validateResponse(target: URL, body: unknown): void {
   const b=body as Record<string,unknown>|null;
   if(b && typeof b==='object' && !Array.isArray(b) && (b.success===false || typeof b.code==='number'&&b.code!==0 || typeof b.StatusCode==='number'&&b.StatusCode!==200 || b.error)) {
     const detail=safeMessage(b.errorMsg??b.Message??(typeof b.error==='string'?b.error:undefined));
-    throw new ApiError(`Upstream ${target.hostname}: ${detail}`,undefined,undefined,'UPSTREAM_ERROR',target.hostname);
+    throw new ApiError(`Upstream ${target.hostname}: ${detail}`,undefined,undefined,target.hostname==='www.onemap.gov.sg'&&/auth|token|credential/i.test(String(b.error))?'AUTH_FAILED':'UPSTREAM_ERROR',target.hostname);
   }
   if(target.hostname==='api.worldbank.org' && Array.isArray(body) && body[0]?.message)throw new ApiError('Invalid World Bank indicator or query',400,undefined,'INVALID_ARGUMENT',target.hostname);
   let schema:z.ZodType|undefined;
