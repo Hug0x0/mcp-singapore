@@ -17,14 +17,22 @@ const routes = [
   { words: ['sante','health','dengue','maladie','disease','hospital'], tools: ['singapore_query_infectious_diseases','singapore_query_healthcare_schemes'], search: 'health' },
   { words: ['restaurant','hawker','food','manger'], tools: ['singapore_query_hawker_centres','singapore_query_hawker_closures'], search: 'hawker' },
   { words: ['touris','hotel','visiteur','visitor'], tools: ['singapore_query_visitor_arrivals','singapore_query_hotel_statistics'], search: 'tourism' },
-  { words: ['population','demograph','habitant','pib','gdp','inflation','economie','economy','emploi','employment','chomage','unemployment','revenu','income','statistic','statistique','commerce','trade'], tools: ['singapore_search_statistics','singapore_get_statistics','singapore_get_indicator'], search: 'population' },
+  { words: ['population','demographie','habitant'], tools: ['singapore_search_statistics','singapore_get_statistics','singapore_get_indicator'], search: 'population' },
+{ words: ['pib','gdp','economie','economy'], tools: ['singapore_search_statistics','singapore_get_statistics','singapore_get_indicator'], search: 'gross domestic product' },
+{ words: ['inflation','prix','price'], tools: ['singapore_search_statistics','singapore_get_statistics','singapore_get_indicator'], search: 'consumer price' },
+{ words: ['emploi','employment','chomage','unemployment'], tools: ['singapore_search_statistics','singapore_get_statistics','singapore_get_indicator'], search: 'unemployment' },
+{ words: ['revenu','revenus','income','salaire','wage'], tools: ['singapore_search_statistics','singapore_get_statistics','singapore_get_indicator'], search: 'income' },
+{ words: ['commerce','trade','export','import'], tools: ['singapore_search_statistics','singapore_get_statistics','singapore_get_indicator'], search: 'trade' },
+{ words: ['statistic','statistique'], tools: ['singapore_search_statistics','singapore_get_statistics','singapore_get_indicator'], search: 'indicators' },
   { words: ['environnement','environment','energie','energy','eau','water','dechet','waste','recycl','carbone','carbon'], tools: ['singapore_query_recycling_rates','singapore_query_greenhouse_emissions','singapore_search_statistics'], search: 'environment' },
   { words: ['adresse','address','postal','geograph','carte','map','quartier','planning area'], tools: ['singapore_search_address','singapore_reverse_geocode','singapore_search_catalog'], search: 'planning area' },
   { words: ['culture','musee','museum','bibliotheque','library','sport'], tools: ['singapore_query_museum_visitors','singapore_query_sport_facilities'], search: 'museum' },
 ];
 export function routeQuestion(question: string) {
   const text = normalize(question);
-  return routes.map(r => ({ ...r, score: r.words.filter(w => text.includes(w)).length })).filter(r => r.score > 0).sort((a,b) => b.score - a.score);
+  const tokens=text.split(/[^a-z0-9]+/).filter(Boolean);
+  const has=(word:string)=>word.includes(' ')?text.includes(word):tokens.some(token=>word.length<=4?token===word:token.startsWith(word));
+  return routes.map(r => ({ ...r, score: r.words.filter(w => has(w)).length })).filter(r => r.score > 0).sort((a,b) => b.score - a.score);
 }
 export function registerDiscovery(server: McpServer) {
   addTool(server, 'singapore_get_capabilities', 'Local configuration and source availability. Reports only whether credentials are configured, never their values. No network requests.', {}, () => ({data:{version:VERSION,transport:'stdio',catalog:{datasets:snapshot.datasets.length,snapshot_at:snapshot.retrieved_at},credentials:{data_gov_sg:Boolean(process.env.DATA_GOV_SG_API_KEY),lta:Boolean(process.env.LTA_ACCOUNT_KEY),onemap:Boolean(process.env.ONEMAP_TOKEN)},limits:config,cache:http.cacheStats()}}));

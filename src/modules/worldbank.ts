@@ -1,7 +1,7 @@
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 import { addTool, limitSchema } from '../tools.js';
-import { http, url } from '../http.js';
+import { http, url, ApiError } from '../http.js';
 import type { Row } from '../types.js';
 export const indicators = {
   population: { id: 'SP.POP.TOTL', title: 'Total population' },
@@ -21,13 +21,13 @@ export const indicators = {
 } as const;
 export function registerWorldBank(server: McpServer) {
   addTool(server, 'singapore_list_indicators', 'Curated World Bank indicators for Singapore. Other valid indicator codes work with get_indicator.', {}, () => ({ source_url: 'https://data.worldbank.org/country/singapore', data: indicators }));
-  addTool(server, 'singapore_get_indicator', 'World Bank historical indicator for Singapore, optionally comparing up to five ISO3 countries. Latest years first; null values are preserved. Definitions and publication lag can differ from SingStat. No key required.', { indicator: z.string().regex(/^[A-Za-z0-9_.]{1,100}$/).describe('Curated alias (e.g. gdp) or World Bank code'), compare_countries: z.array(z.string().regex(/^[A-Z]{3}$/)).max(5).default([]), from_year: z.number().int().min(1960).max(2100).default(2010), to_year: z.number().int().min(1960).max(2100).default(new Date().getUTCFullYear()), page: z.number().int().min(1).max(10000).default(1), limit: limitSchema }, async ({ indicator, compare_countries, from_year, to_year, page, limit }) => {
-    if (from_year > to_year) throw new Error('Invalid year range');
+  addTool(server, 'singapore_get_indicator', 'World Bank historical indicator for Singapore, optionally comparing up to five ISO3 countries. Latest years first; null values are preserved. Definitions and publication lag can differ from SingStat. No key required.', { indicator: z.string().regex(/^[A-Za-z0-9_.]{1,100}$/).describe('Curated alias (e.g. gdp) or World Bank code'), compare_countries: z.array(z.string().regex(/^[A-Z]{3}$/)).max(5).default([]), from_year: z.number().int().min(1960).max(2100).default(2010), to_year: z.number().int().min(1960).max(2100).default(()=>new Date().getUTCFullYear()), page: z.number().int().min(1).max(10000).default(1), limit: limitSchema }, async ({ indicator, compare_countries, from_year, to_year, page, limit }) => {
+    if (from_year > to_year) throw new ApiError('from_year must be less than or equal to to_year',400,undefined,'INVALID_ARGUMENT');
     const code = indicators[indicator as keyof typeof indicators]?.id ?? indicator;
     const countries = [...new Set(['SGP', ...compare_countries])];
     const target = url(`https://api.worldbank.org/v2/country/${countries.join(';')}/indicator/${code}`, { format: 'json', date: `${from_year}:${to_year}`, per_page: limit, page });
     const body = await http.get<[Row, Row[] | null]>(target, { ttlMs: 3600000 });
     if (!Array.isArray(body) || body.length < 2 || body[0].message) throw new Error('Invalid indicator response');
-    return { source_url: target.href, data: { pagination: body[0], observations: body[1] ?? [] } };
+    return { source_url: target.href, data: { pagination: body[0],has_more:Number(body[0].page)<Number(body[0].pages),next_page:Number(body[0].page)<Number(body[0].pages)?Number(body[0].page)+1:null,observations: body[1] ?? [] } };
   });
 }
