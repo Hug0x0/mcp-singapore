@@ -21,8 +21,9 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
-      - run: node scripts/smoke-test.mjs --mode=${{ inputs.mode }}
+      - run: node scripts/smoke-test.mjs --mode="$VERIFY_MODE"
         env:
+          VERIFY_MODE: ${{ inputs.mode }}
           DATA_GOV_SG_API_KEY: ${{ secrets.DATA_GOV_SG_API_KEY }}
           LTA_ACCOUNT_KEY: ${{ secrets.LTA_ACCOUNT_KEY }}
           ONEMAP_TOKEN: ${{ secrets.ONEMAP_TOKEN }}
