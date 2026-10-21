@@ -2,9 +2,11 @@
 
 Serveur MCP TypeScript pour explorer les données publiques de **Singapour**, dans le même esprit que `mcp-reunion` : outils spécialisés, recherche de catalogue et accès générique aux données.
 
-**55 outils · 22 jeux spécialisés · 6 familles de sources · 4 ressources MCP · 1 prompt.** Transport `stdio`, Node.js 20+.
+<!-- coverage-summary:start -->
+**64 outils · 22 jeux spécialisés · 4664 datasets · 74 agences.** Snapshot : 2026-10-21.
+<!-- coverage-summary:end -->
 
-L'index embarqué contient **4 664 jeux de données data.gov.sg**, collectés le **21 octobre 2026**, auprès de dizaines d'agences. C'est un index de métadonnées, pas une copie de toutes les observations. Les enregistrements sont interrogés à la demande. Les formats non tabulaires et certaines API spécialisées ne sont pas compatibles avec Datastore : utiliser les métadonnées et l'export, ou l'outil spécialisé correspondant.
+L’index embarqué couvre le catalogue data.gov.sg. Il contient des métadonnées, pas une copie de toutes les observations. Les lignes sont lues à la demande ; les formats non tabulaires utilisent des exports contrôlés. Voir les limites et périodes dans COVERAGE.md.
 
 ## Données accessibles
 
@@ -143,3 +145,9 @@ Les résultats de la dernière vérification réseau sont dans [docs/live-verifi
 ## Licence
 
 Code : MIT. Structure inspirée des MCP existants de Hug0x0, dont `mcp-reunion`. Les données restent soumises aux conditions de leurs fournisseurs ; conserver leurs attributions et consulter les métadonnées du jeu utilisé. [Singapore Open Data Licence](https://data.gov.sg/open-data-license).
+
+## Améliorations 0.2
+
+Les nouveaux outils comprennent le diagnostic des capacités, la résolution locale d’un ID, les collections, ACRA détaillé, les stations météo, les arrêts proches, la conversion de coordonnées, les équipements proches et les comparaisons HDB sur export complet.
+
+Documentation : [configuration](docs/configuration.md), [contrats fournisseurs](docs/provider-contracts.md), [analyse et géographie](docs/analysis-and-geography.md), [maintenance](docs/maintenance.md), [publication](docs/release.md), [contributions](CONTRIBUTING.md), [changelog](CHANGELOG.md). Les parcours nécessitant des identifiants restent explicitement non vérifiés en conditions réelles sans ces identifiants.

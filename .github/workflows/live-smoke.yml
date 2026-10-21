@@ -1,0 +1,33 @@
+name: Manual provider verification
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Provider checks to run
+        type: choice
+        options: [core, all, auth]
+        default: core
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: node scripts/smoke-test.mjs --mode=${{ inputs.mode }}
+        env:
+          DATA_GOV_SG_API_KEY: ${{ secrets.DATA_GOV_SG_API_KEY }}
+          LTA_ACCOUNT_KEY: ${{ secrets.LTA_ACCOUNT_KEY }}
+          ONEMAP_TOKEN: ${{ secrets.ONEMAP_TOKEN }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: provider-verification
+          path: docs/live-verification.json

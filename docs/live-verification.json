@@ -1,237 +1,536 @@
 {
-  "tested_at": "2026-10-21T15:25:00.915Z",
-  "mode": "all-public",
+  "tested_at": "2026-10-21T16:07:32.968Z",
+  "mode": "all",
+  "summary": {
+    "pass": 54,
+    "fail": 0,
+    "skipped": 4,
+    "pending": 0
+  },
   "results": [
     {
       "tool": "singapore_search_catalog",
+      "arguments": {
+        "query": "HDB"
+      },
       "status": "pass",
-      "duration_ms": 13
+      "duration_ms": 22
     },
     {
       "tool": "singapore_inspect_dataset",
+      "arguments": {
+        "dataset_id": "d_8b84c4ee58e3cfc0ece0d773c8ca6abc"
+      },
       "status": "pass",
-      "duration_ms": 535
+      "duration_ms": 484
     },
     {
       "tool": "singapore_query_hdb_resale",
+      "arguments": {
+        "filters": {
+          "town": "ANG MO KIO"
+        },
+        "limit": 2
+      },
       "status": "pass",
-      "duration_ms": 990
+      "duration_ms": 961
     },
     {
       "tool": "singapore_get_air_temperature",
+      "arguments": {
+        "limit": 2
+      },
       "status": "pass",
-      "duration_ms": 244
+      "duration_ms": 335
     },
     {
       "tool": "singapore_get_forecast_2h",
+      "arguments": {
+        "area": "Ang Mo Kio",
+        "limit": 2
+      },
       "status": "pass",
-      "duration_ms": 1774
+      "duration_ms": 1727
     },
     {
       "tool": "singapore_search_statistics",
+      "arguments": {
+        "query": "population",
+        "limit": 2
+      },
       "status": "pass",
-      "duration_ms": 11268
+      "duration_ms": 7458
     },
     {
       "tool": "singapore_get_statistics",
+      "arguments": {
+        "resource_id": "M810001",
+        "series_contains": "Total Population",
+        "period_limit": 2
+      },
       "status": "pass",
-      "duration_ms": 320
+      "duration_ms": 270
     },
     {
       "tool": "singapore_get_indicator",
+      "arguments": {
+        "indicator": "population",
+        "limit": 2
+      },
       "status": "pass",
-      "duration_ms": 5990
+      "duration_ms": 90
     },
     {
       "tool": "singapore_query_hdb_rentals",
+      "arguments": {
+        "limit": 1
+      },
       "status": "pass",
-      "duration_ms": 875
+      "duration_ms": 1355
     },
     {
       "tool": "singapore_query_hdb_median_rent",
+      "arguments": {
+        "limit": 1
+      },
       "status": "pass",
-      "duration_ms": 2769
+      "duration_ms": 2608
     },
     {
       "tool": "singapore_query_carpark_directory",
+      "arguments": {
+        "limit": 1
+      },
       "status": "pass",
-      "duration_ms": 2600
+      "duration_ms": 2655
     },
     {
       "tool": "singapore_query_schools",
+      "arguments": {
+        "limit": 1
+      },
       "status": "pass",
-      "duration_ms": 2810
+      "duration_ms": 2755
     },
     {
       "tool": "singapore_query_hawker_centres",
+      "arguments": {
+        "limit": 1
+      },
       "status": "pass",
-      "duration_ms": 2572
+      "duration_ms": 2634
     },
     {
       "tool": "singapore_query_hawker_closures",
+      "arguments": {
+        "limit": 1
+      },
       "status": "pass",
-      "duration_ms": 2709
+      "duration_ms": 2723
     },
     {
       "tool": "singapore_query_businesses",
+      "arguments": {
+        "limit": 1
+      },
       "status": "pass",
-      "duration_ms": 2696
+      "duration_ms": 2725
     },
     {
       "tool": "singapore_query_infectious_diseases",
+      "arguments": {
+        "limit": 1
+      },
       "status": "pass",
-      "duration_ms": 2730
+      "duration_ms": 2716
     },
     {
       "tool": "singapore_query_sport_facilities",
+      "arguments": {
+        "limit": 1
+      },
       "status": "pass",
-      "duration_ms": 2826
+      "duration_ms": 2606
     },
     {
       "tool": "singapore_query_museum_visitors",
+      "arguments": {
+        "limit": 1
+      },
       "status": "pass",
-      "duration_ms": 2544
+      "duration_ms": 2806
     },
     {
       "tool": "singapore_query_hotel_statistics",
+      "arguments": {
+        "limit": 1
+      },
       "status": "pass",
-      "duration_ms": 2972
+      "duration_ms": 2650
     },
     {
       "tool": "singapore_query_visitor_arrivals",
+      "arguments": {
+        "limit": 1
+      },
       "status": "pass",
-      "duration_ms": 2398
+      "duration_ms": 2741
     },
     {
       "tool": "singapore_query_recycling_rates",
+      "arguments": {
+        "limit": 1
+      },
       "status": "pass",
-      "duration_ms": 2827
+      "duration_ms": 2736
     },
     {
       "tool": "singapore_query_air_quality_annual",
+      "arguments": {
+        "limit": 1
+      },
       "status": "pass",
-      "duration_ms": 2629
+      "duration_ms": 2619
     },
     {
       "tool": "singapore_query_greenhouse_emissions",
+      "arguments": {
+        "limit": 1
+      },
       "status": "pass",
-      "duration_ms": 2647
+      "duration_ms": 2707
     },
     {
       "tool": "singapore_query_government_expenditure",
+      "arguments": {
+        "limit": 1
+      },
       "status": "pass",
-      "duration_ms": 2366
+      "duration_ms": 2332
     },
     {
       "tool": "singapore_query_land_area",
+      "arguments": {
+        "limit": 1
+      },
       "status": "pass",
-      "duration_ms": 3100
+      "duration_ms": 3137
     },
     {
       "tool": "singapore_query_private_property_prices",
+      "arguments": {
+        "limit": 1
+      },
       "status": "pass",
-      "duration_ms": 2651
+      "duration_ms": 2701
     },
     {
       "tool": "singapore_query_healthcare_schemes",
+      "arguments": {
+        "limit": 1
+      },
       "status": "pass",
-      "duration_ms": 2742
+      "duration_ms": 2612
     },
     {
       "tool": "singapore_query_unemployment",
+      "arguments": {
+        "limit": 1
+      },
       "status": "pass",
-      "duration_ms": 2652
+      "duration_ms": 2761
     },
     {
       "tool": "singapore_query_hdb_population",
+      "arguments": {
+        "limit": 1
+      },
       "status": "pass",
-      "duration_ms": 2779
+      "duration_ms": 2637
     },
     {
       "tool": "singapore_get_rainfall",
+      "arguments": {
+        "limit": 2
+      },
       "status": "pass",
-      "duration_ms": 331
+      "duration_ms": 253
     },
     {
       "tool": "singapore_get_relative_humidity",
+      "arguments": {
+        "limit": 2
+      },
       "status": "pass",
-      "duration_ms": 1673
+      "duration_ms": 1828
     },
     {
       "tool": "singapore_get_wind_speed",
+      "arguments": {
+        "limit": 2
+      },
       "status": "pass",
-      "duration_ms": 1803
+      "duration_ms": 1768
     },
     {
       "tool": "singapore_get_wind_direction",
+      "arguments": {
+        "limit": 2
+      },
       "status": "pass",
-      "duration_ms": 1802
+      "duration_ms": 1769
     },
     {
       "tool": "singapore_get_forecast_24h",
+      "arguments": {
+        "limit": 2
+      },
       "status": "pass",
-      "duration_ms": 1835
+      "duration_ms": 1782
     },
     {
       "tool": "singapore_get_forecast_4day",
+      "arguments": {
+        "limit": 2
+      },
       "status": "pass",
-      "duration_ms": 12060
+      "duration_ms": 12017
     },
     {
       "tool": "singapore_get_psi",
+      "arguments": {
+        "limit": 2
+      },
       "status": "pass",
-      "duration_ms": 1759
+      "duration_ms": 1781
     },
     {
       "tool": "singapore_get_pm25",
+      "arguments": {
+        "limit": 2
+      },
       "status": "pass",
-      "duration_ms": 1742
+      "duration_ms": 1853
     },
     {
       "tool": "singapore_get_uv_index",
+      "arguments": {
+        "limit": 2
+      },
       "status": "pass",
-      "duration_ms": 1796
+      "duration_ms": 1755
+    },
+    {
+      "tool": "singapore_list_weather_stations",
+      "arguments": {
+        "query": "Ang Mo Kio",
+        "limit": 2
+      },
+      "status": "pass",
+      "duration_ms": 1773
     },
     {
       "tool": "singapore_get_taxi_availability",
+      "arguments": {
+        "latitude": 1.3,
+        "longitude": 103.8,
+        "limit": 2
+      },
       "status": "pass",
-      "duration_ms": 2454
+      "duration_ms": 1488
     },
     {
       "tool": "singapore_get_carpark_availability",
+      "arguments": {
+        "limit": 2
+      },
       "status": "pass",
-      "duration_ms": 2911
+      "duration_ms": 2047
     },
     {
       "tool": "singapore_get_traffic_images",
+      "arguments": {
+        "limit": 2
+      },
       "status": "pass",
-      "duration_ms": 419
+      "duration_ms": 2117
     },
     {
       "tool": "singapore_get_collection",
+      "arguments": {
+        "collection_id": 189
+      },
       "status": "pass",
-      "duration_ms": 354
+      "duration_ms": 359
     },
     {
       "tool": "singapore_list_catalog_page",
+      "arguments": {
+        "page": 1
+      },
       "status": "pass",
-      "duration_ms": 404
+      "duration_ms": 422
+    },
+    {
+      "tool": "singapore_list_collections",
+      "arguments": {
+        "page": 1
+      },
+      "status": "pass",
+      "duration_ms": 2400
+    },
+    {
+      "tool": "singapore_search_acra",
+      "arguments": {
+        "partition": "A",
+        "name": "ACRA",
+        "limit": 1
+      },
+      "status": "pass",
+      "duration_ms": 1566
     },
     {
       "tool": "singapore_download_dataset",
-      "action": "initiate",
+      "arguments": {
+        "dataset_id": "d_0b2c034da121ef8efc71949af1694b4d",
+        "action": "initiate"
+      },
       "status": "pass",
-      "tested_at": "2026-10-21T15:26:44.820Z"
+      "export_state": "initiated",
+      "duration_ms": 261
     },
     {
       "tool": "singapore_download_dataset",
-      "action": "poll",
+      "arguments": {
+        "dataset_id": "d_0b2c034da121ef8efc71949af1694b4d",
+        "action": "poll"
+      },
       "status": "pass",
-      "tested_at": "2026-10-21T15:26:50.264Z"
+      "export_state": "ready",
+      "duration_ms": 15722
+    },
+    {
+      "tool": "singapore_find_nearby_facilities",
+      "arguments": {
+        "category": "carparks",
+        "latitude": 1.3,
+        "longitude": 103.8,
+        "limit": 2
+      },
+      "status": "pass",
+      "duration_ms": 38314
+    },
+    {
+      "tool": "singapore_find_nearby_facilities",
+      "arguments": {
+        "category": "hawker_centres",
+        "latitude": 1.3,
+        "longitude": 103.8,
+        "limit": 2
+      },
+      "status": "pass",
+      "duration_ms": 7520
+    },
+    {
+      "tool": "singapore_find_nearby_facilities",
+      "arguments": {
+        "category": "preschools",
+        "latitude": 1.3,
+        "longitude": 103.8,
+        "limit": 2
+      },
+      "status": "pass",
+      "duration_ms": 11838
+    },
+    {
+      "tool": "singapore_find_nearby_facilities",
+      "arguments": {
+        "category": "parks",
+        "latitude": 1.3,
+        "longitude": 103.8,
+        "limit": 2
+      },
+      "status": "pass",
+      "duration_ms": 12110
+    },
+    {
+      "tool": "singapore_find_nearby_facilities",
+      "arguments": {
+        "category": "sport_facilities",
+        "latitude": 1.3,
+        "longitude": 103.8,
+        "limit": 2
+      },
+      "status": "pass",
+      "duration_ms": 10420
+    },
+    {
+      "tool": "singapore_compare_hdb_prices",
+      "arguments": {
+        "towns": [
+          "ANG MO KIO",
+          "BEDOK"
+        ],
+        "flat_type": "4 ROOM",
+        "from_month": "2026-09",
+        "to_month": "2026-10"
+      },
+      "status": "pass",
+      "duration_ms": 14249
+    },
+    {
+      "tool": "singapore_get_bus_arrivals",
+      "arguments": {
+        "bus_stop_code": "01012"
+      },
+      "status": "skipped",
+      "reason": "LTA_ACCOUNT_KEY is not configured"
+    },
+    {
+      "tool": "singapore_query_lta",
+      "arguments": {
+        "dataset": "bus_stops",
+        "bus_stop_code": "01012",
+        "limit": 2
+      },
+      "status": "skipped",
+      "reason": "LTA_ACCOUNT_KEY is not configured"
+    },
+    {
+      "tool": "singapore_search_address",
+      "arguments": {
+        "query": "018956"
+      },
+      "status": "skipped",
+      "reason": "ONEMAP_TOKEN is not configured"
+    },
+    {
+      "tool": "singapore_reverse_geocode",
+      "arguments": {
+        "latitude": 1.3,
+        "longitude": 103.8
+      },
+      "status": "skipped",
+      "reason": "ONEMAP_TOKEN is not configured"
     }
   ],
   "untested": [
-    "LTA DataMall (requires LTA_ACCOUNT_KEY)",
-    "OneMap (requires ONEMAP_TOKEN)"
-  ]
+    {
+      "tool": "singapore_get_bus_arrivals",
+      "reason": "LTA_ACCOUNT_KEY is not configured"
+    },
+    {
+      "tool": "singapore_query_lta",
+      "reason": "LTA_ACCOUNT_KEY is not configured"
+    },
+    {
+      "tool": "singapore_search_address",
+      "reason": "ONEMAP_TOKEN is not configured"
+    },
+    {
+      "tool": "singapore_reverse_geocode",
+      "reason": "ONEMAP_TOKEN is not configured"
+    }
+  ],
+  "incomplete": []
 }

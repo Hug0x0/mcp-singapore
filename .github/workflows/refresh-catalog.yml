@@ -1,0 +1,41 @@
+name: Refresh catalog for review
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm run refresh:catalog
+        env:
+          DATA_GOV_SG_API_KEY: ${{ secrets.DATA_GOV_SG_API_KEY }}
+      - run: npm test
+      - name: Propose snapshot changes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git config user.name github-actions[bot]
+            git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+            branch="codex/catalog-refresh-${GITHUB_RUN_ID}"
+            git switch -c "$branch"
+            git add data README.md COVERAGE.md
+            git commit -m "chore: refresh Singapore data catalog"
+            git push origin "$branch"
+            gh pr create --base main --head "$branch" --title "Refresh Singapore data catalog" --body "Updates the catalog, curated metadata and generated documentation after integrity and schema checks. Review the catalog refresh report before merging."
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: catalog-refresh-report
+          path: data/catalog-refresh-report.json

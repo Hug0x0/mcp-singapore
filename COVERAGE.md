@@ -1,36 +1,38 @@
 # Coverage
 
-Catalog snapshot: 2026-10-21T15:17:51.033Z. **4664 datasets**, **74 agencies**. This is searchable metadata; records remain at their providers.
+Snapshot: 2026-10-21T15:17:51.033Z. 4664 datasets · 74 publishing agencies · 64 MCP tools. This is metadata coverage; provider records are fetched on demand.
 
 ## Specialized datasets
 
-| Tool | Source dataset | Agency | Coverage end in snapshot |
-|---|---|---|---|
-| `singapore_query_hdb_resale` | [Resale flat prices based on registration date from Jan-2017 onwards](https://data.gov.sg/datasets/d_8b84c4ee58e3cfc0ece0d773c8ca6abc/view) | Housing & Development Board | 2026-10-01 |
-| `singapore_query_hdb_rentals` | [Renting Out of Flats from Jan 2021](https://data.gov.sg/datasets/d_c9f57187485a850908655db0e8cfe651/view) | Housing & Development Board | 2026-09-01 |
-| `singapore_query_hdb_median_rent` | [Median Rent By Town And Flat Type](https://data.gov.sg/datasets/d_23000a00c52996c55106084ed0339566/view) | Housing & Development Board | 2026-06-30 |
-| `singapore_query_carpark_directory` | [HDB Carpark Information](https://data.gov.sg/datasets/d_23f946fa557947f93a8043bbef41dd09/view) | Housing & Development Board | Not supplied |
-| `singapore_query_schools` | [General information of schools](https://data.gov.sg/datasets/d_688b934f82c1059ed0a6993d2a829089/view) | Ministry of Education | 2026-12-31 |
-| `singapore_query_hawker_centres` | [List of Government Markets Hawker Centres](https://data.gov.sg/datasets/d_68a42f09f350881996d83f9cd73ab02f/view) | National Environment Agency | 2016-09-01 |
-| `singapore_query_hawker_closures` | [Dates of Hawker Centres Closure](https://data.gov.sg/datasets/d_bda4baa634dd1cc7a6c7cad5f19e2d68/view) | National Environment Agency | 2026-12-31 |
-| `singapore_query_businesses` | [Entities Registered with ACRA](https://data.gov.sg/datasets/d_3f960c10fed6145404ca7b821f263b87/view) | Accounting and Corporate Regulatory Authority | 2026-10-11 |
-| `singapore_query_infectious_diseases` | [Weekly Infectious Disease Bulletin Cases](https://data.gov.sg/datasets/d_ca168b2cb763640d72c4600a68f9909e/view) | Ministry of Health | 2022-12-31 |
-| `singapore_query_sport_facilities` | [Sport Facilities](https://data.gov.sg/datasets/d_2cfb0867cdeb2b7303068995699dc33b/view) | Sport Singapore | Not supplied |
-| `singapore_query_museum_visitors` | [Visitorship to National Museums and Heritage Institutions](https://data.gov.sg/datasets/d_618a1224b896b436ce650be1f77c804e/view) | Ministry of Culture, Community and Youth | 2019-12-31 |
-| `singapore_query_hotel_statistics` | [Monthly Gazetted Hotels Statistics](https://data.gov.sg/datasets/d_1db0bd2ffd95ac09c66db600e60d3400/view) | Singapore Tourism Board | 2015-12-31 |
-| `singapore_query_visitor_arrivals` | [International Visitor Arrivals By Place Of Residence, Monthly](https://data.gov.sg/datasets/d_7e7b2ee60c6ffc962f80fef129cf306e/view) | Singapore Department of Statistics | 2026-01-01 |
-| `singapore_query_recycling_rates` | [Recycling Rate By Waste Type](https://data.gov.sg/datasets/d_9740df787da2b59a0b5bd76a6c33453d/view) | National Environment Agency | 2015-12-31 |
-| `singapore_query_air_quality_annual` | [Air Quality, Annual](https://data.gov.sg/datasets/d_b733fb074ed97f4d322525467b0fa457/view) | Singapore Department of Statistics | 2025-12-31 |
-| `singapore_query_greenhouse_emissions` | [Greenhouse Gas Emissions By Sector, Annual](https://data.gov.sg/datasets/d_1b8dcef6bf32ece26deca60e59d99f71/view) | Singapore Department of Statistics | 2023-12-31 |
-| `singapore_query_government_expenditure` | [Government Total Expenditure](https://data.gov.sg/datasets/d_00f95040967791729d51bd7cd6af2355/view) | Ministry of Finance | Not supplied |
-| `singapore_query_land_area` | [Land Area (As At December), Annual](https://data.gov.sg/datasets/d_0b2c034da121ef8efc71949af1694b4d/view) | Singapore Department of Statistics | 2025-12-31 |
-| `singapore_query_private_property_prices` | [Price Indices Of Non-Landed Private Residential Properties By Locality (1st Quarter 2009 = 100), Quarterly](https://data.gov.sg/datasets/d_65f5bf43d377db3939d93eb6f744d950/view) | Singapore Department of Statistics | 2025-09-30 |
-| `singapore_query_healthcare_schemes` | [Healthcare Schemes and Subsidies](https://data.gov.sg/datasets/d_586ee0cbc5c79ff8167a46132a405239/view) | Ministry of Health | Not supplied |
-| `singapore_query_unemployment` | [Average Resident Unemployment Rate By Sex, Age And Highest Qualification Attained (HQA), Annual](https://data.gov.sg/datasets/d_11a640f1e61c1a680efeac8c775cdcb5/view) | Singapore Department of Statistics | 2025-12-31 |
-| `singapore_query_hdb_population` | [HDB Resident Population by Geographical Distribution](https://data.gov.sg/datasets/d_0a6c6d71f6fa14e2d27e406f1d018439/view) | Housing & Development Board | 2018-12-31 |
+| Tool | Dataset | Coverage end |
+|---|---|---|
+| `singapore_query_hdb_resale` | [Resale flat prices based on registration date from Jan-2017 onwards](https://data.gov.sg/datasets/d_8b84c4ee58e3cfc0ece0d773c8ca6abc/view) | 2026-10-01 |
+| `singapore_query_hdb_rentals` | [Renting Out of Flats from Jan 2021](https://data.gov.sg/datasets/d_c9f57187485a850908655db0e8cfe651/view) | 2026-09-01 |
+| `singapore_query_hdb_median_rent` | [Median Rent By Town And Flat Type](https://data.gov.sg/datasets/d_23000a00c52996c55106084ed0339566/view) | 2026-06-30 |
+| `singapore_query_carpark_directory` | [HDB Carpark Information](https://data.gov.sg/datasets/d_23f946fa557947f93a8043bbef41dd09/view) | Unknown |
+| `singapore_query_schools` | [General information of schools](https://data.gov.sg/datasets/d_688b934f82c1059ed0a6993d2a829089/view) | 2026-12-31 |
+| `singapore_query_hawker_centres` | [List of Government Markets Hawker Centres](https://data.gov.sg/datasets/d_68a42f09f350881996d83f9cd73ab02f/view) | 2016-09-01 |
+| `singapore_query_hawker_closures` | [Dates of Hawker Centres Closure](https://data.gov.sg/datasets/d_bda4baa634dd1cc7a6c7cad5f19e2d68/view) | 2026-12-31 |
+| `singapore_query_businesses` | [Entities Registered with ACRA](https://data.gov.sg/datasets/d_3f960c10fed6145404ca7b821f263b87/view) | 2026-10-11 |
+| `singapore_query_infectious_diseases` | [Weekly Infectious Disease Bulletin Cases](https://data.gov.sg/datasets/d_ca168b2cb763640d72c4600a68f9909e/view) | 2022-12-31 |
+| `singapore_query_sport_facilities` | [Sport Facilities](https://data.gov.sg/datasets/d_2cfb0867cdeb2b7303068995699dc33b/view) | Unknown |
+| `singapore_query_museum_visitors` | [Visitorship to National Museums and Heritage Institutions](https://data.gov.sg/datasets/d_618a1224b896b436ce650be1f77c804e/view) | 2019-12-31 |
+| `singapore_query_hotel_statistics` | [Monthly Gazetted Hotels Statistics](https://data.gov.sg/datasets/d_1db0bd2ffd95ac09c66db600e60d3400/view) | 2015-12-31 |
+| `singapore_query_visitor_arrivals` | [International Visitor Arrivals By Place Of Residence, Monthly](https://data.gov.sg/datasets/d_7e7b2ee60c6ffc962f80fef129cf306e/view) | 2026-01-01 |
+| `singapore_query_recycling_rates` | [Recycling Rate By Waste Type](https://data.gov.sg/datasets/d_9740df787da2b59a0b5bd76a6c33453d/view) | 2015-12-31 |
+| `singapore_query_air_quality_annual` | [Air Quality, Annual](https://data.gov.sg/datasets/d_b733fb074ed97f4d322525467b0fa457/view) | 2025-12-31 |
+| `singapore_query_greenhouse_emissions` | [Greenhouse Gas Emissions By Sector, Annual](https://data.gov.sg/datasets/d_1b8dcef6bf32ece26deca60e59d99f71/view) | 2023-12-31 |
+| `singapore_query_government_expenditure` | [Government Total Expenditure](https://data.gov.sg/datasets/d_00f95040967791729d51bd7cd6af2355/view) | Unknown |
+| `singapore_query_land_area` | [Land Area (As At December), Annual](https://data.gov.sg/datasets/d_0b2c034da121ef8efc71949af1694b4d/view) | 2025-12-31 |
+| `singapore_query_private_property_prices` | [Price Indices Of Non-Landed Private Residential Properties By Locality (1st Quarter 2009 = 100), Quarterly](https://data.gov.sg/datasets/d_65f5bf43d377db3939d93eb6f744d950/view) | 2025-09-30 |
+| `singapore_query_healthcare_schemes` | [Healthcare Schemes and Subsidies](https://data.gov.sg/datasets/d_586ee0cbc5c79ff8167a46132a405239/view) | Unknown |
+| `singapore_query_unemployment` | [Average Resident Unemployment Rate By Sex, Age And Highest Qualification Attained (HQA), Annual](https://data.gov.sg/datasets/d_11a640f1e61c1a680efeac8c775cdcb5/view) | 2025-12-31 |
+| `singapore_query_hdb_population` | [HDB Resident Population by Geographical Distribution](https://data.gov.sg/datasets/d_0a6c6d71f6fa14e2d27e406f1d018439/view) | 2018-12-31 |
 
-## All MCP tools
+## Tools
 
+- **`singapore_lookup_dataset`** — Resolve an exact dataset ID in the bundled snapshot. No network; a missing entry may exist in the live catalog.
+- **`singapore_list_collections`** — List a live page of data.gov.sg collections and their child dataset IDs. Page size is controlled by the provider.
 - **`singapore_search_catalog`** — Search the bundled full data.gov.sg catalog by English keywords, agency and format. No network needed. Results include snapshot date. Use inspect_dataset then query_dataset; non-tabular datasets may require download. Use list_catalog_page for updates since the snapshot.
 - **`singapore_list_catalog_page`** — List a current live page of data.gov.sg catalog (upstream page size). Use search_catalog for fast search of the bundled snapshot.
 - **`singapore_inspect_dataset`** — Get live dataset metadata, schema, format, coverage and last update. Field IDs may be internal: use columnMetadata.map/metaMapping names for datastore filters.
@@ -61,34 +63,37 @@ Catalog snapshot: 2026-10-21T15:17:51.033Z. **4664 datasets**, **74 agencies**. 
 - **`singapore_query_healthcare_schemes`** — Query Healthcare Schemes and Subsidies (Ministry of Health). Topic: health. Inspect dataset d_586ee0cbc5c79ff8167a46132a405239 first for filter fields. Supports exact filters, column text search, fields, sort and pagination. Returns source coverage from the bundled catalog; fetch metadata for current coverage.
 - **`singapore_query_unemployment`** — Query Average Resident Unemployment Rate By Sex, Age And Highest Qualification Attained (HQA), Annual (Singapore Department of Statistics). Topic: employment. Inspect dataset d_11a640f1e61c1a680efeac8c775cdcb5 first for filter fields. Supports exact filters, column text search, fields, sort and pagination. Returns source coverage from the bundled catalog; fetch metadata for current coverage.
 - **`singapore_query_hdb_population`** — Query HDB Resident Population by Geographical Distribution (Housing & Development Board). Topic: population. Inspect dataset d_0a6c6d71f6fa14e2d27e406f1d018439 first for filter fields. Supports exact filters, column text search, fields, sort and pagination. Returns source coverage from the bundled catalog; fetch metadata for current coverage.
-- **`singapore_get_air_temperature`** — NEA air temperature observations by station (degrees Celsius). Latest if date omitted. Dates are Singapore local time. Returns upstream timestamps, metadata and pagination token; forward paginationToken to retrieve more history.
-- **`singapore_get_rainfall`** — NEA rainfall observations by station (mm). Latest if date omitted. Dates are Singapore local time. Returns upstream timestamps, metadata and pagination token; forward paginationToken to retrieve more history.
-- **`singapore_get_relative_humidity`** — NEA relative humidity by station (%). Latest if date omitted. Dates are Singapore local time. Returns upstream timestamps, metadata and pagination token; forward paginationToken to retrieve more history.
-- **`singapore_get_wind_speed`** — NEA wind speed by station (knots, preserve upstream units). Latest if date omitted. Dates are Singapore local time. Returns upstream timestamps, metadata and pagination token; forward paginationToken to retrieve more history.
-- **`singapore_get_wind_direction`** — NEA wind direction by station (degrees). Latest if date omitted. Dates are Singapore local time. Returns upstream timestamps, metadata and pagination token; forward paginationToken to retrieve more history.
-- **`singapore_get_forecast_2h`** — NEA 2-hour forecast by area, with validity period. Latest if date omitted. Dates are Singapore local time. Returns upstream timestamps, metadata and pagination token; forward paginationToken to retrieve more history.
-- **`singapore_get_forecast_24h`** — NEA 24-hour forecast with temperature, humidity, wind and regional outlook. Latest if date omitted. Dates are Singapore local time. Returns upstream timestamps, metadata and pagination token; forward paginationToken to retrieve more history.
-- **`singapore_get_forecast_4day`** — NEA four-day weather outlook. Latest if date omitted. Dates are Singapore local time. Returns upstream timestamps, metadata and pagination token; forward paginationToken to retrieve more history.
-- **`singapore_get_psi`** — NEA Pollutant Standards Index and pollutant concentrations by region. Latest if date omitted. Dates are Singapore local time. Returns upstream timestamps, metadata and pagination token; forward paginationToken to retrieve more history.
-- **`singapore_get_pm25`** — NEA fine particulate matter PM2.5 by region (micrograms per cubic metre). Latest if date omitted. Dates are Singapore local time. Returns upstream timestamps, metadata and pagination token; forward paginationToken to retrieve more history.
-- **`singapore_get_uv_index`** — NEA UV index readings. Latest if date omitted. Dates are Singapore local time. Returns upstream timestamps, metadata and pagination token; forward paginationToken to retrieve more history.
+- **`singapore_get_air_temperature`** — NEA temperature (degrees Celsius). Singapore local dates; latest if omitted. Local limits apply to timestamp groups. Consume local offsets before continuing the preserved upstream pagination token.
+- **`singapore_get_rainfall`** — NEA rainfall (mm). Singapore local dates; latest if omitted. Local limits apply to timestamp groups. Consume local offsets before continuing the preserved upstream pagination token.
+- **`singapore_get_relative_humidity`** — NEA humidity (%). Singapore local dates; latest if omitted. Local limits apply to timestamp groups. Consume local offsets before continuing the preserved upstream pagination token.
+- **`singapore_get_wind_speed`** — NEA wind speed (knots). Singapore local dates; latest if omitted. Local limits apply to timestamp groups. Consume local offsets before continuing the preserved upstream pagination token.
+- **`singapore_get_wind_direction`** — NEA wind direction (degrees). Singapore local dates; latest if omitted. Local limits apply to timestamp groups. Consume local offsets before continuing the preserved upstream pagination token.
+- **`singapore_get_forecast_2h`** — NEA 2-hour area forecasts. Singapore local dates; latest if omitted. Local limits apply to timestamp groups. Consume local offsets before continuing the preserved upstream pagination token.
+- **`singapore_get_forecast_24h`** — NEA 24-hour weather forecast. Singapore local dates; latest if omitted. Local limits apply to timestamp groups. Consume local offsets before continuing the preserved upstream pagination token.
+- **`singapore_get_forecast_4day`** — NEA four-day outlook. Singapore local dates; latest if omitted. Local limits apply to timestamp groups. Consume local offsets before continuing the preserved upstream pagination token.
+- **`singapore_get_psi`** — NEA PSI and pollutants by region. Singapore local dates; latest if omitted. Local limits apply to timestamp groups. Consume local offsets before continuing the preserved upstream pagination token.
+- **`singapore_get_pm25`** — NEA PM2.5 (micrograms per cubic metre). Singapore local dates; latest if omitted. Local limits apply to timestamp groups. Consume local offsets before continuing the preserved upstream pagination token.
+- **`singapore_get_uv_index`** — NEA UV index. Singapore local dates; latest if omitted. Local limits apply to timestamp groups. Consume local offsets before continuing the preserved upstream pagination token.
+- **`singapore_list_weather_stations`** — Discover weather stations, IDs and WGS84 coordinates by observed measure; search by ID/name. No observations omitted from a claimed national inventory.
 - **`singapore_get_taxi_availability`** — Available taxi coordinates from data.gov.sg, optionally within a radius sorted by distance. Latest unless date_time supplied. Coordinates use WGS84; returns a bounded sample and total match count.
 - **`singapore_get_carpark_availability`** — HDB/URA carpark live available lots by carpark number. Does not include coordinates: join with carpark directory to locate carparks.
 - **`singapore_get_traffic_images`** — Traffic camera image URLs, coordinates and timestamps. Optional radius filter. Image URLs are returned, never fetched by this server.
 - **`singapore_get_bus_arrivals`** — Live next buses at a bus stop, estimated arrival, load and accessibility. Requires LTA_ACCOUNT_KEY. Bus stop codes retain leading zeros.
-- **`singapore_query_lta`** — Read LTA DataMall bus stops/routes/services, carparks, incidents, speed bands, taxi stands, train alerts or estimated travel times. Requires LTA_ACCOUNT_KEY. Pagination is upstream $skip (usually 500/page); query is one page, not the complete national inventory.
+- **`singapore_query_lta`** — LTA lists and alerts. Requires LTA_ACCOUNT_KEY. Stop/service filters are allowed only on provider endpoints supporting them. Offsets apply only to paginated datasets.
+- **`singapore_find_nearby_bus_stops`** — Search a bounded set of LTA bus-stop pages near WGS84 coordinates. Requires LTA_ACCOUNT_KEY. Complete is true only after an upstream short page; continuation identifies the next unscanned page.
 - **`singapore_search_statistics`** — Search SingStat Table Builder across all official economic, population, labour, trade, health and social tables. Returns resource IDs to use with inspect_statistics/get_statistics. Use English terms.
 - **`singapore_inspect_statistics`** — Get SingStat table metadata, frequency, units, definitions, notes, series and coverage before reading observations.
 - **`singapore_get_statistics`** — Read SingStat time series, retaining unit and footnotes. Fetches table (or one exact upstream period), then filters series locally and keeps the last N upstream periods per series. Values remain strings to preserve missing-value markers. Use series_offset to paginate series.
+- **`singapore_convert_coordinates`** — Convert SVY21 easting/northing metres to WGS84 longitude/latitude or the reverse within Singapore. Uses SLA projection parameters; no API key.
 - **`singapore_search_address`** — OneMap official address/building/postal-code geocoding (WGS84 plus SVY21). Requires ONEMAP_TOKEN. Search pages are provider pages, usually 10 results.
 - **`singapore_reverse_geocode`** — OneMap reverse geocoding of Singapore WGS84 coordinates to nearby addresses. Requires ONEMAP_TOKEN.
 - **`singapore_list_indicators`** — Curated World Bank indicators for Singapore. Other valid indicator codes work with get_indicator.
 - **`singapore_get_indicator`** — World Bank historical indicator for Singapore, optionally comparing up to five ISO3 countries. Latest years first; null values are preserved. Definitions and publication lag can differ from SingStat. No key required.
+- **`singapore_get_capabilities`** — Local configuration and source availability. Reports only whether credentials are configured, never their values. No network requests.
 - **`singapore_get_sources`** — List connected official data sources, documentation and API key requirements. This server reads public information; no account mutation tools.
 - **`singapore_find_relevant_tools`** — Route a question in French or English to tools and datasets. Deterministic keyword matching; suggestions are not evidence or computed facts. Search catalog with English keywords.
+- **`singapore_search_acra`** — Search one detailed ACRA partition by entity name or UEN. Select A-Z or Others explicitly; no automatic scan of all partitions. Inspect returned schema for provider field names.
+- **`singapore_find_nearby_facilities`** — Find nearby HDB carparks with live availability, hawker centres, preschools, park facilities or sport facilities. Reads a bounded full official export (64 MiB max). Only Point geometries with validated WGS84 coordinates are considered; omitted geometries are counted. No arbitrary download URL input.
+- **`singapore_compare_hdb_prices`** — Compare HDB resale prices across towns and a bounded month interval using the entire official CSV export (64 MiB maximum). Does not extrapolate from a Datastore page. Exports may still be processing: retry on EXPORT_PENDING.
 
-## Authentication and limits
-
-Public access is available for data.gov.sg, SingStat and World Bank, subject to quotas. LTA DataMall requires LTA_ACCOUNT_KEY; OneMap requires ONEMAP_TOKEN. Authenticated endpoints were not verified with real credentials. GEOJSON, KML and other non-tabular data use provider exports; a catalog entry does not imply Datastore compatibility.
-
-The catalog is a dated snapshot. Upstream pages can change during collection; use live catalog pages and metadata for newly published or revised records.
+See [provider contracts](docs/provider-contracts.md), [configuration](docs/configuration.md) and [analysis/geography](docs/analysis-and-geography.md) for scope and limits.

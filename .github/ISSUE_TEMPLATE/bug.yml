@@ -1,0 +1,21 @@
+name: Bug
+description: Signaler un comportement reproductible
+labels: [bug]
+body:
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction et résultat observé
+      description: Version, outil, paramètres sans secrets, résultat attendu et obtenu.
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: Source et périmètre
+      description: URL officielle, dates de couverture, page ou échantillon concerné.
+  - type: textarea
+    id: validation
+    attributes:
+      label: Éléments de diagnostic
+      description: Message d'erreur nettoyé, environnement Node/client MCP. Ne joindre aucune clé.

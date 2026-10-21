@@ -1,0 +1,2777 @@
+{
+  "version": "0.2.0",
+  "tools": [
+    {
+      "name": "singapore_lookup_dataset",
+      "description": "Resolve an exact dataset ID in the bundled snapshot. No network; a missing entry may exist in the live catalog.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "dataset_id": {
+            "type": "string",
+            "pattern": "^d_[a-f0-9]{32}$"
+          }
+        },
+        "required": [
+          "dataset_id"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_list_collections",
+      "description": "List a live page of data.gov.sg collections and their child dataset IDs. Page size is controlled by the provider.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "default": 1,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10000
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_search_catalog",
+      "description": "Search the bundled full data.gov.sg catalog by English keywords, agency and format. No network needed. Results include snapshot date. Use inspect_dataset then query_dataset; non-tabular datasets may require download. Use list_catalog_page for updates since the snapshot.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "default": "",
+            "type": "string",
+            "maxLength": 300
+          },
+          "agency": {
+            "default": "",
+            "type": "string",
+            "maxLength": 200
+          },
+          "format": {
+            "default": "",
+            "type": "string",
+            "maxLength": 30
+          },
+          "status": {
+            "type": "string",
+            "maxLength": 30
+          },
+          "coverage_year": {
+            "type": "integer",
+            "minimum": 1800,
+            "maximum": 2100
+          },
+          "updated_since": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "include_unknown_coverage": {
+            "default": false,
+            "type": "boolean"
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_list_catalog_page",
+      "description": "List a current live page of data.gov.sg catalog (upstream page size). Use search_catalog for fast search of the bundled snapshot.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "default": 1,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10000
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_inspect_dataset",
+      "description": "Get live dataset metadata, schema, format, coverage and last update. Field IDs may be internal: use columnMetadata.map/metaMapping names for datastore filters.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "dataset_id": {
+            "type": "string",
+            "pattern": "^d_[a-f0-9]{32}$"
+          },
+          "fields_limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "fields_offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          },
+          "include_raw": {
+            "default": false,
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "dataset_id"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_query_dataset",
+      "description": "Query any tabular data.gov.sg dataset. Exact filters, column text search, projection, sorting and pagination. Preserve upstream values/units; no SQL. Non-tabular or unsupported datasets can be downloaded instead.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "dataset_id": {
+            "type": "string",
+            "pattern": "^d_[a-f0-9]{32}$"
+          },
+          "filters": {
+            "description": "Exact equality by field name, e.g. {\"town\":\"ANG MO KIO\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "q": {
+            "description": "Search text by column, e.g. {\"school_name\":\"RAFFLES\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "fields": {
+            "maxItems": 50,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            }
+          },
+          "sort": {
+            "description": "e.g. month desc, resale_price desc; inspect fields first",
+            "type": "string",
+            "maxLength": 500
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          }
+        },
+        "required": [
+          "dataset_id"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_get_collection",
+      "description": "Get a collection and its child dataset metadata to discover related historical series or ACRA partitions.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "collection_id": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "collection_id"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_download_dataset",
+      "description": "Start or poll a dataset export. Call initiate once, then poll on later calls. Returns provider download URL (may expire), never downloads large files into the conversation. Suitable for CSV/GeoJSON/KML and datasets without datastore support.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "dataset_id": {
+            "type": "string",
+            "pattern": "^d_[a-f0-9]{32}$"
+          },
+          "action": {
+            "default": "initiate",
+            "type": "string",
+            "enum": [
+              "initiate",
+              "poll"
+            ]
+          }
+        },
+        "required": [
+          "dataset_id"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_catalog_summary",
+      "description": "List dataset counts by publishing agency and file format, with catalog snapshot date.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_list_curated_datasets",
+      "description": "Browse curated datasets and tool names by topic. Includes coverage dates: some series are historical. The full catalog is searchable separately.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "topic": {
+            "type": "string",
+            "maxLength": 100
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_query_hdb_resale",
+      "description": "Query Resale flat prices based on registration date from Jan-2017 onwards (Housing & Development Board). Topic: housing. Inspect dataset d_8b84c4ee58e3cfc0ece0d773c8ca6abc first for filter fields. Supports exact filters, column text search, fields, sort and pagination. Returns source coverage from the bundled catalog; fetch metadata for current coverage.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "filters": {
+            "description": "Exact equality by field name, e.g. {\"town\":\"ANG MO KIO\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "q": {
+            "description": "Search text by column, e.g. {\"school_name\":\"RAFFLES\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "fields": {
+            "maxItems": 50,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            }
+          },
+          "sort": {
+            "description": "e.g. month desc, resale_price desc; inspect fields first",
+            "type": "string",
+            "maxLength": 500
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_query_hdb_rentals",
+      "description": "Query Renting Out of Flats from Jan 2021 (Housing & Development Board). Topic: housing. Inspect dataset d_c9f57187485a850908655db0e8cfe651 first for filter fields. Supports exact filters, column text search, fields, sort and pagination. Returns source coverage from the bundled catalog; fetch metadata for current coverage.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "filters": {
+            "description": "Exact equality by field name, e.g. {\"town\":\"ANG MO KIO\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "q": {
+            "description": "Search text by column, e.g. {\"school_name\":\"RAFFLES\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "fields": {
+            "maxItems": 50,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            }
+          },
+          "sort": {
+            "description": "e.g. month desc, resale_price desc; inspect fields first",
+            "type": "string",
+            "maxLength": 500
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_query_hdb_median_rent",
+      "description": "Query Median Rent By Town And Flat Type (Housing & Development Board). Topic: housing. Inspect dataset d_23000a00c52996c55106084ed0339566 first for filter fields. Supports exact filters, column text search, fields, sort and pagination. Returns source coverage from the bundled catalog; fetch metadata for current coverage.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "filters": {
+            "description": "Exact equality by field name, e.g. {\"town\":\"ANG MO KIO\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "q": {
+            "description": "Search text by column, e.g. {\"school_name\":\"RAFFLES\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "fields": {
+            "maxItems": 50,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            }
+          },
+          "sort": {
+            "description": "e.g. month desc, resale_price desc; inspect fields first",
+            "type": "string",
+            "maxLength": 500
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_query_carpark_directory",
+      "description": "Query HDB Carpark Information (Housing & Development Board). Topic: transport. Inspect dataset d_23f946fa557947f93a8043bbef41dd09 first for filter fields. Supports exact filters, column text search, fields, sort and pagination. Returns source coverage from the bundled catalog; fetch metadata for current coverage.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "filters": {
+            "description": "Exact equality by field name, e.g. {\"town\":\"ANG MO KIO\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "q": {
+            "description": "Search text by column, e.g. {\"school_name\":\"RAFFLES\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "fields": {
+            "maxItems": 50,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            }
+          },
+          "sort": {
+            "description": "e.g. month desc, resale_price desc; inspect fields first",
+            "type": "string",
+            "maxLength": 500
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_query_schools",
+      "description": "Query General information of schools (Ministry of Education). Topic: education. Inspect dataset d_688b934f82c1059ed0a6993d2a829089 first for filter fields. Supports exact filters, column text search, fields, sort and pagination. Returns source coverage from the bundled catalog; fetch metadata for current coverage.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "filters": {
+            "description": "Exact equality by field name, e.g. {\"town\":\"ANG MO KIO\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "q": {
+            "description": "Search text by column, e.g. {\"school_name\":\"RAFFLES\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "fields": {
+            "maxItems": 50,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            }
+          },
+          "sort": {
+            "description": "e.g. month desc, resale_price desc; inspect fields first",
+            "type": "string",
+            "maxLength": 500
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_query_hawker_centres",
+      "description": "Query List of Government Markets Hawker Centres (National Environment Agency). Topic: food. Inspect dataset d_68a42f09f350881996d83f9cd73ab02f first for filter fields. Supports exact filters, column text search, fields, sort and pagination. Returns source coverage from the bundled catalog; fetch metadata for current coverage.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "filters": {
+            "description": "Exact equality by field name, e.g. {\"town\":\"ANG MO KIO\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "q": {
+            "description": "Search text by column, e.g. {\"school_name\":\"RAFFLES\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "fields": {
+            "maxItems": 50,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            }
+          },
+          "sort": {
+            "description": "e.g. month desc, resale_price desc; inspect fields first",
+            "type": "string",
+            "maxLength": 500
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_query_hawker_closures",
+      "description": "Query Dates of Hawker Centres Closure (National Environment Agency). Topic: food. Inspect dataset d_bda4baa634dd1cc7a6c7cad5f19e2d68 first for filter fields. Supports exact filters, column text search, fields, sort and pagination. Returns source coverage from the bundled catalog; fetch metadata for current coverage.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "filters": {
+            "description": "Exact equality by field name, e.g. {\"town\":\"ANG MO KIO\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "q": {
+            "description": "Search text by column, e.g. {\"school_name\":\"RAFFLES\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "fields": {
+            "maxItems": 50,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            }
+          },
+          "sort": {
+            "description": "e.g. month desc, resale_price desc; inspect fields first",
+            "type": "string",
+            "maxLength": 500
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_query_businesses",
+      "description": "Query Entities Registered with ACRA (Accounting and Corporate Regulatory Authority). Topic: economy. Inspect dataset d_3f960c10fed6145404ca7b821f263b87 first for filter fields. Supports exact filters, column text search, fields, sort and pagination. Returns source coverage from the bundled catalog; fetch metadata for current coverage.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "filters": {
+            "description": "Exact equality by field name, e.g. {\"town\":\"ANG MO KIO\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "q": {
+            "description": "Search text by column, e.g. {\"school_name\":\"RAFFLES\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "fields": {
+            "maxItems": 50,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            }
+          },
+          "sort": {
+            "description": "e.g. month desc, resale_price desc; inspect fields first",
+            "type": "string",
+            "maxLength": 500
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_query_infectious_diseases",
+      "description": "Query Weekly Infectious Disease Bulletin Cases (Ministry of Health). Topic: health. Inspect dataset d_ca168b2cb763640d72c4600a68f9909e first for filter fields. Supports exact filters, column text search, fields, sort and pagination. Returns source coverage from the bundled catalog; fetch metadata for current coverage.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "filters": {
+            "description": "Exact equality by field name, e.g. {\"town\":\"ANG MO KIO\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "q": {
+            "description": "Search text by column, e.g. {\"school_name\":\"RAFFLES\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "fields": {
+            "maxItems": 50,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            }
+          },
+          "sort": {
+            "description": "e.g. month desc, resale_price desc; inspect fields first",
+            "type": "string",
+            "maxLength": 500
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_query_sport_facilities",
+      "description": "Query Sport Facilities (Sport Singapore). Topic: culture. Inspect dataset d_2cfb0867cdeb2b7303068995699dc33b first for filter fields. Supports exact filters, column text search, fields, sort and pagination. Returns source coverage from the bundled catalog; fetch metadata for current coverage.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "filters": {
+            "description": "Exact equality by field name, e.g. {\"town\":\"ANG MO KIO\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "q": {
+            "description": "Search text by column, e.g. {\"school_name\":\"RAFFLES\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "fields": {
+            "maxItems": 50,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            }
+          },
+          "sort": {
+            "description": "e.g. month desc, resale_price desc; inspect fields first",
+            "type": "string",
+            "maxLength": 500
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_query_museum_visitors",
+      "description": "Query Visitorship to National Museums and Heritage Institutions (Ministry of Culture, Community and Youth). Topic: culture. Inspect dataset d_618a1224b896b436ce650be1f77c804e first for filter fields. Supports exact filters, column text search, fields, sort and pagination. Returns source coverage from the bundled catalog; fetch metadata for current coverage.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "filters": {
+            "description": "Exact equality by field name, e.g. {\"town\":\"ANG MO KIO\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "q": {
+            "description": "Search text by column, e.g. {\"school_name\":\"RAFFLES\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "fields": {
+            "maxItems": 50,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            }
+          },
+          "sort": {
+            "description": "e.g. month desc, resale_price desc; inspect fields first",
+            "type": "string",
+            "maxLength": 500
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_query_hotel_statistics",
+      "description": "Query Monthly Gazetted Hotels Statistics (Singapore Tourism Board). Topic: tourism. Inspect dataset d_1db0bd2ffd95ac09c66db600e60d3400 first for filter fields. Supports exact filters, column text search, fields, sort and pagination. Returns source coverage from the bundled catalog; fetch metadata for current coverage.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "filters": {
+            "description": "Exact equality by field name, e.g. {\"town\":\"ANG MO KIO\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "q": {
+            "description": "Search text by column, e.g. {\"school_name\":\"RAFFLES\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "fields": {
+            "maxItems": 50,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            }
+          },
+          "sort": {
+            "description": "e.g. month desc, resale_price desc; inspect fields first",
+            "type": "string",
+            "maxLength": 500
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_query_visitor_arrivals",
+      "description": "Query International Visitor Arrivals By Place Of Residence, Monthly (Singapore Department of Statistics). Topic: tourism. Inspect dataset d_7e7b2ee60c6ffc962f80fef129cf306e first for filter fields. Supports exact filters, column text search, fields, sort and pagination. Returns source coverage from the bundled catalog; fetch metadata for current coverage.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "filters": {
+            "description": "Exact equality by field name, e.g. {\"town\":\"ANG MO KIO\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "q": {
+            "description": "Search text by column, e.g. {\"school_name\":\"RAFFLES\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "fields": {
+            "maxItems": 50,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            }
+          },
+          "sort": {
+            "description": "e.g. month desc, resale_price desc; inspect fields first",
+            "type": "string",
+            "maxLength": 500
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_query_recycling_rates",
+      "description": "Query Recycling Rate By Waste Type (National Environment Agency). Topic: environment. Inspect dataset d_9740df787da2b59a0b5bd76a6c33453d first for filter fields. Supports exact filters, column text search, fields, sort and pagination. Returns source coverage from the bundled catalog; fetch metadata for current coverage.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "filters": {
+            "description": "Exact equality by field name, e.g. {\"town\":\"ANG MO KIO\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "q": {
+            "description": "Search text by column, e.g. {\"school_name\":\"RAFFLES\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "fields": {
+            "maxItems": 50,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            }
+          },
+          "sort": {
+            "description": "e.g. month desc, resale_price desc; inspect fields first",
+            "type": "string",
+            "maxLength": 500
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_query_air_quality_annual",
+      "description": "Query Air Quality, Annual (Singapore Department of Statistics). Topic: environment. Inspect dataset d_b733fb074ed97f4d322525467b0fa457 first for filter fields. Supports exact filters, column text search, fields, sort and pagination. Returns source coverage from the bundled catalog; fetch metadata for current coverage.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "filters": {
+            "description": "Exact equality by field name, e.g. {\"town\":\"ANG MO KIO\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "q": {
+            "description": "Search text by column, e.g. {\"school_name\":\"RAFFLES\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "fields": {
+            "maxItems": 50,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            }
+          },
+          "sort": {
+            "description": "e.g. month desc, resale_price desc; inspect fields first",
+            "type": "string",
+            "maxLength": 500
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_query_greenhouse_emissions",
+      "description": "Query Greenhouse Gas Emissions By Sector, Annual (Singapore Department of Statistics). Topic: environment. Inspect dataset d_1b8dcef6bf32ece26deca60e59d99f71 first for filter fields. Supports exact filters, column text search, fields, sort and pagination. Returns source coverage from the bundled catalog; fetch metadata for current coverage.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "filters": {
+            "description": "Exact equality by field name, e.g. {\"town\":\"ANG MO KIO\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "q": {
+            "description": "Search text by column, e.g. {\"school_name\":\"RAFFLES\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "fields": {
+            "maxItems": 50,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            }
+          },
+          "sort": {
+            "description": "e.g. month desc, resale_price desc; inspect fields first",
+            "type": "string",
+            "maxLength": 500
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_query_government_expenditure",
+      "description": "Query Government Total Expenditure (Ministry of Finance). Topic: finance. Inspect dataset d_00f95040967791729d51bd7cd6af2355 first for filter fields. Supports exact filters, column text search, fields, sort and pagination. Returns source coverage from the bundled catalog; fetch metadata for current coverage.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "filters": {
+            "description": "Exact equality by field name, e.g. {\"town\":\"ANG MO KIO\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "q": {
+            "description": "Search text by column, e.g. {\"school_name\":\"RAFFLES\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "fields": {
+            "maxItems": 50,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            }
+          },
+          "sort": {
+            "description": "e.g. month desc, resale_price desc; inspect fields first",
+            "type": "string",
+            "maxLength": 500
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_query_land_area",
+      "description": "Query Land Area (As At December), Annual (Singapore Department of Statistics). Topic: geography. Inspect dataset d_0b2c034da121ef8efc71949af1694b4d first for filter fields. Supports exact filters, column text search, fields, sort and pagination. Returns source coverage from the bundled catalog; fetch metadata for current coverage.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "filters": {
+            "description": "Exact equality by field name, e.g. {\"town\":\"ANG MO KIO\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "q": {
+            "description": "Search text by column, e.g. {\"school_name\":\"RAFFLES\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "fields": {
+            "maxItems": 50,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            }
+          },
+          "sort": {
+            "description": "e.g. month desc, resale_price desc; inspect fields first",
+            "type": "string",
+            "maxLength": 500
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_query_private_property_prices",
+      "description": "Query Price Indices Of Non-Landed Private Residential Properties By Locality (1st Quarter 2009 = 100), Quarterly (Singapore Department of Statistics). Topic: housing. Inspect dataset d_65f5bf43d377db3939d93eb6f744d950 first for filter fields. Supports exact filters, column text search, fields, sort and pagination. Returns source coverage from the bundled catalog; fetch metadata for current coverage.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "filters": {
+            "description": "Exact equality by field name, e.g. {\"town\":\"ANG MO KIO\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "q": {
+            "description": "Search text by column, e.g. {\"school_name\":\"RAFFLES\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "fields": {
+            "maxItems": 50,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            }
+          },
+          "sort": {
+            "description": "e.g. month desc, resale_price desc; inspect fields first",
+            "type": "string",
+            "maxLength": 500
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_query_healthcare_schemes",
+      "description": "Query Healthcare Schemes and Subsidies (Ministry of Health). Topic: health. Inspect dataset d_586ee0cbc5c79ff8167a46132a405239 first for filter fields. Supports exact filters, column text search, fields, sort and pagination. Returns source coverage from the bundled catalog; fetch metadata for current coverage.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "filters": {
+            "description": "Exact equality by field name, e.g. {\"town\":\"ANG MO KIO\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "q": {
+            "description": "Search text by column, e.g. {\"school_name\":\"RAFFLES\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "fields": {
+            "maxItems": 50,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            }
+          },
+          "sort": {
+            "description": "e.g. month desc, resale_price desc; inspect fields first",
+            "type": "string",
+            "maxLength": 500
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_query_unemployment",
+      "description": "Query Average Resident Unemployment Rate By Sex, Age And Highest Qualification Attained (HQA), Annual (Singapore Department of Statistics). Topic: employment. Inspect dataset d_11a640f1e61c1a680efeac8c775cdcb5 first for filter fields. Supports exact filters, column text search, fields, sort and pagination. Returns source coverage from the bundled catalog; fetch metadata for current coverage.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "filters": {
+            "description": "Exact equality by field name, e.g. {\"town\":\"ANG MO KIO\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "q": {
+            "description": "Search text by column, e.g. {\"school_name\":\"RAFFLES\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "fields": {
+            "maxItems": 50,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            }
+          },
+          "sort": {
+            "description": "e.g. month desc, resale_price desc; inspect fields first",
+            "type": "string",
+            "maxLength": 500
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_query_hdb_population",
+      "description": "Query HDB Resident Population by Geographical Distribution (Housing & Development Board). Topic: population. Inspect dataset d_0a6c6d71f6fa14e2d27e406f1d018439 first for filter fields. Supports exact filters, column text search, fields, sort and pagination. Returns source coverage from the bundled catalog; fetch metadata for current coverage.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "filters": {
+            "description": "Exact equality by field name, e.g. {\"town\":\"ANG MO KIO\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "q": {
+            "description": "Search text by column, e.g. {\"school_name\":\"RAFFLES\"}",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "fields": {
+            "maxItems": 50,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            }
+          },
+          "sort": {
+            "description": "e.g. month desc, resale_price desc; inspect fields first",
+            "type": "string",
+            "maxLength": 500
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_get_air_temperature",
+      "description": "NEA temperature (degrees Celsius). Singapore local dates; latest if omitted. Local limits apply to timestamp groups. Consume local offsets before continuing the preserved upstream pagination token.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "description": "Singapore local time UTC+08:00: YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss",
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}(?:T(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:[+]08:00)?)?$"
+          },
+          "pagination_token": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "station_id": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "area": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "region": {
+            "type": "string",
+            "enum": [
+              "north",
+              "south",
+              "east",
+              "west",
+              "central",
+              "national"
+            ]
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_get_rainfall",
+      "description": "NEA rainfall (mm). Singapore local dates; latest if omitted. Local limits apply to timestamp groups. Consume local offsets before continuing the preserved upstream pagination token.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "description": "Singapore local time UTC+08:00: YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss",
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}(?:T(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:[+]08:00)?)?$"
+          },
+          "pagination_token": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "station_id": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "area": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "region": {
+            "type": "string",
+            "enum": [
+              "north",
+              "south",
+              "east",
+              "west",
+              "central",
+              "national"
+            ]
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_get_relative_humidity",
+      "description": "NEA humidity (%). Singapore local dates; latest if omitted. Local limits apply to timestamp groups. Consume local offsets before continuing the preserved upstream pagination token.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "description": "Singapore local time UTC+08:00: YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss",
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}(?:T(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:[+]08:00)?)?$"
+          },
+          "pagination_token": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "station_id": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "area": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "region": {
+            "type": "string",
+            "enum": [
+              "north",
+              "south",
+              "east",
+              "west",
+              "central",
+              "national"
+            ]
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_get_wind_speed",
+      "description": "NEA wind speed (knots). Singapore local dates; latest if omitted. Local limits apply to timestamp groups. Consume local offsets before continuing the preserved upstream pagination token.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "description": "Singapore local time UTC+08:00: YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss",
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}(?:T(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:[+]08:00)?)?$"
+          },
+          "pagination_token": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "station_id": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "area": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "region": {
+            "type": "string",
+            "enum": [
+              "north",
+              "south",
+              "east",
+              "west",
+              "central",
+              "national"
+            ]
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_get_wind_direction",
+      "description": "NEA wind direction (degrees). Singapore local dates; latest if omitted. Local limits apply to timestamp groups. Consume local offsets before continuing the preserved upstream pagination token.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "description": "Singapore local time UTC+08:00: YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss",
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}(?:T(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:[+]08:00)?)?$"
+          },
+          "pagination_token": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "station_id": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "area": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "region": {
+            "type": "string",
+            "enum": [
+              "north",
+              "south",
+              "east",
+              "west",
+              "central",
+              "national"
+            ]
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_get_forecast_2h",
+      "description": "NEA 2-hour area forecasts. Singapore local dates; latest if omitted. Local limits apply to timestamp groups. Consume local offsets before continuing the preserved upstream pagination token.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "description": "Singapore local time UTC+08:00: YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss",
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}(?:T(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:[+]08:00)?)?$"
+          },
+          "pagination_token": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "station_id": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "area": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "region": {
+            "type": "string",
+            "enum": [
+              "north",
+              "south",
+              "east",
+              "west",
+              "central",
+              "national"
+            ]
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_get_forecast_24h",
+      "description": "NEA 24-hour weather forecast. Singapore local dates; latest if omitted. Local limits apply to timestamp groups. Consume local offsets before continuing the preserved upstream pagination token.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "description": "Singapore local time UTC+08:00: YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss",
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}(?:T(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:[+]08:00)?)?$"
+          },
+          "pagination_token": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "station_id": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "area": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "region": {
+            "type": "string",
+            "enum": [
+              "north",
+              "south",
+              "east",
+              "west",
+              "central",
+              "national"
+            ]
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_get_forecast_4day",
+      "description": "NEA four-day outlook. Singapore local dates; latest if omitted. Local limits apply to timestamp groups. Consume local offsets before continuing the preserved upstream pagination token.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "description": "Singapore local time UTC+08:00: YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss",
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}(?:T(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:[+]08:00)?)?$"
+          },
+          "pagination_token": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "station_id": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "area": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "region": {
+            "type": "string",
+            "enum": [
+              "north",
+              "south",
+              "east",
+              "west",
+              "central",
+              "national"
+            ]
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_get_psi",
+      "description": "NEA PSI and pollutants by region. Singapore local dates; latest if omitted. Local limits apply to timestamp groups. Consume local offsets before continuing the preserved upstream pagination token.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "description": "Singapore local time UTC+08:00: YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss",
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}(?:T(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:[+]08:00)?)?$"
+          },
+          "pagination_token": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "station_id": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "area": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "region": {
+            "type": "string",
+            "enum": [
+              "north",
+              "south",
+              "east",
+              "west",
+              "central",
+              "national"
+            ]
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_get_pm25",
+      "description": "NEA PM2.5 (micrograms per cubic metre). Singapore local dates; latest if omitted. Local limits apply to timestamp groups. Consume local offsets before continuing the preserved upstream pagination token.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "description": "Singapore local time UTC+08:00: YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss",
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}(?:T(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:[+]08:00)?)?$"
+          },
+          "pagination_token": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "station_id": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "area": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "region": {
+            "type": "string",
+            "enum": [
+              "north",
+              "south",
+              "east",
+              "west",
+              "central",
+              "national"
+            ]
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_get_uv_index",
+      "description": "NEA UV index. Singapore local dates; latest if omitted. Local limits apply to timestamp groups. Consume local offsets before continuing the preserved upstream pagination token.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "description": "Singapore local time UTC+08:00: YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss",
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}(?:T(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:[+]08:00)?)?$"
+          },
+          "pagination_token": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "station_id": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "area": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "region": {
+            "type": "string",
+            "enum": [
+              "north",
+              "south",
+              "east",
+              "west",
+              "central",
+              "national"
+            ]
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_list_weather_stations",
+      "description": "Discover weather stations, IDs and WGS84 coordinates by observed measure; search by ID/name. No observations omitted from a claimed national inventory.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "measure": {
+            "default": "air-temperature",
+            "type": "string",
+            "enum": [
+              "air-temperature",
+              "rainfall",
+              "relative-humidity",
+              "wind-speed",
+              "wind-direction"
+            ]
+          },
+          "query": {
+            "default": "",
+            "type": "string",
+            "maxLength": 100
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_get_taxi_availability",
+      "description": "Available taxi coordinates from data.gov.sg, optionally within a radius sorted by distance. Latest unless date_time supplied. Coordinates use WGS84; returns a bounded sample and total match count.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "latitude": {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90
+          },
+          "longitude": {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180
+          },
+          "radius_km": {
+            "default": 5,
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "maximum": 100
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          },
+          "date_time": {
+            "description": "Singapore local time UTC+08:00: YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss",
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}(?:T(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:[+]08:00)?)?$"
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_get_carpark_availability",
+      "description": "HDB/URA carpark live available lots by carpark number. Does not include coordinates: join with carpark directory to locate carparks.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "carpark_number": {
+            "type": "string",
+            "maxLength": 20
+          },
+          "date_time": {
+            "description": "Singapore local time UTC+08:00: YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss",
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}(?:T(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:[+]08:00)?)?$"
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_get_traffic_images",
+      "description": "Traffic camera image URLs, coordinates and timestamps. Optional radius filter. Image URLs are returned, never fetched by this server.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "latitude": {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90
+          },
+          "longitude": {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180
+          },
+          "radius_km": {
+            "default": 5,
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "maximum": 100
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          },
+          "camera_id": {
+            "type": "string",
+            "maxLength": 30
+          },
+          "date_time": {
+            "description": "Singapore local time UTC+08:00: YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss",
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}(?:T(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:[+]08:00)?)?$"
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_get_bus_arrivals",
+      "description": "Live next buses at a bus stop, estimated arrival, load and accessibility. Requires LTA_ACCOUNT_KEY. Bus stop codes retain leading zeros.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "bus_stop_code": {
+            "type": "string",
+            "pattern": "^\\d{5}$"
+          },
+          "service_no": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9]{1,10}$"
+          }
+        },
+        "required": [
+          "bus_stop_code"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_query_lta",
+      "description": "LTA lists and alerts. Requires LTA_ACCOUNT_KEY. Stop/service filters are allowed only on provider endpoints supporting them. Offsets apply only to paginated datasets.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "dataset": {
+            "type": "string",
+            "enum": [
+              "bus_stops",
+              "bus_routes",
+              "bus_services",
+              "carparks",
+              "traffic_incidents",
+              "traffic_speed_bands",
+              "taxi_stands",
+              "train_service_alerts",
+              "estimated_travel_times",
+              "flood_alerts",
+              "faulty_traffic_lights",
+              "road_works",
+              "road_openings"
+            ]
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "bus_stop_code": {
+            "type": "string",
+            "pattern": "^\\d{5}$"
+          },
+          "service_no": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9]{1,10}$"
+          }
+        },
+        "required": [
+          "dataset"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_find_nearby_bus_stops",
+      "description": "Search a bounded set of LTA bus-stop pages near WGS84 coordinates. Requires LTA_ACCOUNT_KEY. Complete is true only after an upstream short page; continuation identifies the next unscanned page.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "latitude": {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90
+          },
+          "longitude": {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180
+          },
+          "radius_km": {
+            "default": 2,
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "maximum": 100
+          },
+          "max_pages": {
+            "default": 3,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          },
+          "result_offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          }
+        },
+        "required": [
+          "latitude",
+          "longitude"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_search_statistics",
+      "description": "Search SingStat Table Builder across all official economic, population, labour, trade, health and social tables. Returns resource IDs to use with inspect_statistics/get_statistics. Use English terms.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_inspect_statistics",
+      "description": "Get SingStat table metadata, frequency, units, definitions, notes, series and coverage before reading observations.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "resource_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9]{1,24}$"
+          },
+          "series_limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "series_offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          },
+          "include_raw": {
+            "default": false,
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "resource_id"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_get_statistics",
+      "description": "Read SingStat time series, retaining unit and footnotes. Fetches table (or one exact upstream period), then filters series locally and keeps the last N upstream periods per series. Values remain strings to preserve missing-value markers. Use series_offset to paginate series.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "resource_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9]{1,24}$"
+          },
+          "period": {
+            "description": "Exact upstream period, e.g. 2024; inspect table frequency first",
+            "type": "string",
+            "pattern": "^[\\w .,-]{1,40}$"
+          },
+          "series_contains": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "from_period": {
+            "type": "string",
+            "maxLength": 30
+          },
+          "to_period": {
+            "type": "string",
+            "maxLength": 30
+          },
+          "order": {
+            "default": "asc",
+            "type": "string",
+            "enum": [
+              "asc",
+              "desc"
+            ]
+          },
+          "series_offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          },
+          "series_limit": {
+            "default": 10,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 50
+          },
+          "period_limit": {
+            "default": 12,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          }
+        },
+        "required": [
+          "resource_id"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_convert_coordinates",
+      "description": "Convert SVY21 easting/northing metres to WGS84 longitude/latitude or the reverse within Singapore. Uses SLA projection parameters; no API key.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "type": "string",
+            "enum": [
+              "SVY21",
+              "WGS84"
+            ]
+          },
+          "x": {
+            "type": "number"
+          },
+          "y": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "from",
+          "x",
+          "y"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_search_address",
+      "description": "OneMap official address/building/postal-code geocoding (WGS84 plus SVY21). Requires ONEMAP_TOKEN. Search pages are provider pages, usually 10 results.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "page": {
+            "default": 1,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10000
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_reverse_geocode",
+      "description": "OneMap reverse geocoding of Singapore WGS84 coordinates to nearby addresses. Requires ONEMAP_TOKEN.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "latitude": {
+            "type": "number",
+            "minimum": 1.1,
+            "maximum": 1.5
+          },
+          "longitude": {
+            "type": "number",
+            "minimum": 103.5,
+            "maximum": 104.2
+          },
+          "radius_m": {
+            "default": 100,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 500
+          }
+        },
+        "required": [
+          "latitude",
+          "longitude"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_list_indicators",
+      "description": "Curated World Bank indicators for Singapore. Other valid indicator codes work with get_indicator.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_get_indicator",
+      "description": "World Bank historical indicator for Singapore, optionally comparing up to five ISO3 countries. Latest years first; null values are preserved. Definitions and publication lag can differ from SingStat. No key required.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "indicator": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_.]{1,100}$",
+            "description": "Curated alias (e.g. gdp) or World Bank code"
+          },
+          "compare_countries": {
+            "default": [],
+            "maxItems": 5,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Z]{3}$"
+            }
+          },
+          "from_year": {
+            "default": 2010,
+            "type": "integer",
+            "minimum": 1960,
+            "maximum": 2100
+          },
+          "to_year": {
+            "default": 2026,
+            "type": "integer",
+            "minimum": 1960,
+            "maximum": 2100
+          },
+          "page": {
+            "default": 1,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10000
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          }
+        },
+        "required": [
+          "indicator"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_get_capabilities",
+      "description": "Local configuration and source availability. Reports only whether credentials are configured, never their values. No network requests.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_get_sources",
+      "description": "List connected official data sources, documentation and API key requirements. This server reads public information; no account mutation tools.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_find_relevant_tools",
+      "description": "Route a question in French or English to tools and datasets. Deterministic keyword matching; suggestions are not evidence or computed facts. Search catalog with English keywords.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "question": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          }
+        },
+        "required": [
+          "question"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_search_acra",
+      "description": "Search one detailed ACRA partition by entity name or UEN. Select A-Z or Others explicitly; no automatic scan of all partitions. Inspect returned schema for provider field names.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "partition": {
+            "type": "string",
+            "pattern": "^(?:[A-Z]|Others)$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 200
+          },
+          "uen": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9]{5,20}$"
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          }
+        },
+        "required": [
+          "partition"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_find_nearby_facilities",
+      "description": "Find nearby HDB carparks with live availability, hawker centres, preschools, park facilities or sport facilities. Reads a bounded full official export (64 MiB max). Only Point geometries with validated WGS84 coordinates are considered; omitted geometries are counted. No arbitrary download URL input.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "string",
+            "enum": [
+              "carparks",
+              "hawker_centres",
+              "preschools",
+              "parks",
+              "sport_facilities"
+            ]
+          },
+          "latitude": {
+            "type": "number",
+            "minimum": 1.1,
+            "maximum": 1.5
+          },
+          "longitude": {
+            "type": "number",
+            "minimum": 103.5,
+            "maximum": 104.2
+          },
+          "radius_km": {
+            "default": 2,
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "maximum": 100
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          },
+          "include_properties": {
+            "default": false,
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "category",
+          "latitude",
+          "longitude"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    },
+    {
+      "name": "singapore_compare_hdb_prices",
+      "description": "Compare HDB resale prices across towns and a bounded month interval using the entire official CSV export (64 MiB maximum). Does not extrapolate from a Datastore page. Exports may still be processing: retry on EXPORT_PENDING.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "towns": {
+            "minItems": 1,
+            "maxItems": 5,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 80
+            }
+          },
+          "flat_type": {
+            "type": "string",
+            "maxLength": 30
+          },
+          "from_month": {
+            "type": "string",
+            "pattern": "^\\d{4}-(?:0[1-9]|1[0-2])$"
+          },
+          "to_month": {
+            "type": "string",
+            "pattern": "^\\d{4}-(?:0[1-9]|1[0-2])$"
+          }
+        },
+        "required": [
+          "towns",
+          "from_month",
+          "to_month"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    }
+  ]
+}

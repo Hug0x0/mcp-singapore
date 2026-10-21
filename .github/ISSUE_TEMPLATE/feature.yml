@@ -1,0 +1,17 @@
+name: Amélioration
+description: Proposer une capacité ou une nouvelle source
+labels: [enhancement]
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: Besoin utilisateur et exemple de question
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Périmètre, source officielle et critères de réussite
+      description: Préciser la pagination, les unités, les identifiants nécessaires et les limites connues.
+    validations:
+      required: true
