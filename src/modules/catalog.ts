@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { snapshot, queryDataset, metadata, CATALOG_BASE } from '../clients/datagov.js';
 import { http, url, dataGovHeaders } from '../http.js';
 import { addTool, datasetId, limitSchema, offsetSchema, normalize, pagination } from '../tools.js';
+import {exportDataset}from'../exports.js';
 import type { Row } from '../types.js';
 export const queryShape = {
   dataset_id: datasetId, filters: z.record(z.string(), z.string()).optional().describe('Exact equality by field name, e.g. {"town":"ANG MO KIO"}'),
@@ -39,8 +40,7 @@ export function registerCatalog(server: McpServer) {
     return { source_url: target.href, data: (await http.get<{ data: unknown }>(target, { headers: dataGovHeaders(), ttlMs: 3600000 })).data };
   });
   addTool(server, 'singapore_download_dataset', 'Start or poll a dataset export. Call initiate once, then poll on later calls. Returns provider download URL (may expire), never downloads large files into the conversation. Suitable for CSV/GeoJSON/KML and datasets without datastore support.', { dataset_id: datasetId, action: z.enum(['initiate', 'poll']).default('initiate') }, async ({ dataset_id, action }) => {
-    const target = `https://api-open.data.gov.sg/v1/public/api/datasets/${dataset_id}/${action === 'initiate' ? 'initiate' : 'poll'}-download`;
-    return { source_url: target, data: await http.get<Row>(target, { headers: dataGovHeaders(), intervalMs: 5500, rateGroup: 'downloads' }), warnings: ['Download links can expire. A pending export is not an error; poll again later.'] };
+    return exportDataset(dataset_id,action);
   });
   addTool(server, 'singapore_catalog_summary', 'List dataset counts by publishing agency and file format, with catalog snapshot date.', {}, () => {
     const agencies: Record<string, number> = {}; const formats: Record<string, number> = {};

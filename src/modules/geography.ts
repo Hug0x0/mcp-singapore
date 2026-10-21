@@ -2,10 +2,12 @@ import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 import { addTool } from '../tools.js';
 import { http, url, ApiError } from '../http.js';
+import{convertCoordinates}from'../geo.js';
 import type { Row } from '../types.js';
 function headers() { const token = process.env.ONEMAP_TOKEN; if (!token) throw new ApiError('Set ONEMAP_TOKEN for OneMap. Generate a token at https://www.onemap.gov.sg/apidocs/',undefined,undefined,'AUTH_REQUIRED'); return { Authorization: token }; }
 export function validateOneMap(body:Row,reverse=false){const schema=reverse?z.object({GeocodeInfo:z.array(z.record(z.string(),z.unknown()))}):z.object({found:z.number(),totalNumPages:z.number(),pageNum:z.number(),results:z.array(z.record(z.string(),z.unknown()))});if(!schema.safeParse(body).success)throw new ApiError('Unexpected OneMap response schema',undefined,undefined,'INVALID_RESPONSE','www.onemap.gov.sg');}
 export function registerGeography(server: McpServer) {
+  addTool(server,'singapore_convert_coordinates','Convert SVY21 easting/northing metres to WGS84 longitude/latitude or the reverse within Singapore. Uses SLA projection parameters; no API key.',{from:z.enum(['SVY21','WGS84']),x:z.number(),y:z.number()},({from,x,y})=>({source_url:'https://app.sla.gov.sg/sirent/About/PlaneCoordinateSystem',data:convertCoordinates(from,x,y)}));
   addTool(server, 'singapore_search_address', 'OneMap official address/building/postal-code geocoding (WGS84 plus SVY21). Requires ONEMAP_TOKEN. Search pages are provider pages, usually 10 results.', { query: z.string().min(1).max(200), page: z.number().int().min(1).max(10000).default(1) }, async ({ query, page }) => {
     const target = url('https://www.onemap.gov.sg/api/common/elastic/search', { searchVal: query, returnGeom: 'Y', getAddrDetails: 'Y', pageNum: page });
     const body = await http.get<Row>(target, { headers: headers(), ttlMs: 3600000 });

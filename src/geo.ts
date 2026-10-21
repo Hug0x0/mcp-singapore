@@ -1,0 +1,3 @@
+import proj4 from'proj4';import{ApiError}from'./http.js';
+const SVY21='+proj=tmerc +lat_0=1.366666666666667 +lon_0=103.83333333333333 +k=1 +x_0=28001.642 +y_0=38744.572 +datum=WGS84 +units=m +no_defs';
+export function convertCoordinates(from:'SVY21'|'WGS84',x:number,y:number){if(!Number.isFinite(x)||!Number.isFinite(y)||from==='SVY21'&&(x<0||x>100000||y<0||y>100000)||from==='WGS84'&&(x<103.5||x>104.2||y<1.1||y>1.5))throw new ApiError('Coordinates outside supported Singapore bounds',400,undefined,'INVALID_ARGUMENT');const[outX,outY]=from==='SVY21'?proj4(SVY21,'WGS84',[x,y]):proj4('WGS84',SVY21,[x,y]);return{x:outX,y:outY,crs:from==='SVY21'?'WGS84':'SVY21',axis_order:from==='SVY21'?'longitude,latitude':'easting,northing'};}
