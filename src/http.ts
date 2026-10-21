@@ -6,6 +6,7 @@ import { validateResponse } from './contracts.js';
 import { VERSION } from './version.js';
 export { ApiError } from './errors.js';
 const shutdown=new AbortController();
+export const shutdownSignal=shutdown.signal;
 export function abortAllRequests(){shutdown.abort();}
 const HOSTS = new Set(['api-production.data.gov.sg','api-open.data.gov.sg','api.data.gov.sg','data.gov.sg','tablebuilder.singstat.gov.sg','datamall2.mytransport.sg','www.onemap.gov.sg','api.worldbank.org']);
 interface Options { headers?:Record<string,string>;ttlMs?:number;intervalMs?:number;rateGroup?:string;signal?:AbortSignal }
