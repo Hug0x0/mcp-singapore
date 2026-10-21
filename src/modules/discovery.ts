@@ -2,6 +2,10 @@ import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 import { addTool, normalize, limitSchema } from '../tools.js';
 import { sources } from '../sources.js';
+import { VERSION } from '../version.js';
+import { config } from '../config.js';
+import { http } from '../http.js';
+import { snapshot } from '../clients/datagov.js';
 import { searchCatalog } from './catalog.js';
 const routes = [
   { words: ['meteo','weather','pluie','rain','temperature','vent','humidite'], tools: ['singapore_get_forecast_2h','singapore_get_forecast_24h','singapore_get_air_temperature','singapore_get_rainfall'], search: 'weather' },
@@ -23,6 +27,7 @@ export function routeQuestion(question: string) {
   return routes.map(r => ({ ...r, score: r.words.filter(w => text.includes(w)).length })).filter(r => r.score > 0).sort((a,b) => b.score - a.score);
 }
 export function registerDiscovery(server: McpServer) {
+  addTool(server, 'singapore_get_capabilities', 'Local configuration and source availability. Reports only whether credentials are configured, never their values. No network requests.', {}, () => ({data:{version:VERSION,transport:'stdio',catalog:{datasets:snapshot.datasets.length,snapshot_at:snapshot.retrieved_at},credentials:{data_gov_sg:Boolean(process.env.DATA_GOV_SG_API_KEY),lta:Boolean(process.env.LTA_ACCOUNT_KEY),onemap:Boolean(process.env.ONEMAP_TOKEN)},limits:config,cache:http.cacheStats()}}));
   addTool(server, 'singapore_get_sources', 'List connected official data sources, documentation and API key requirements. This server reads public information; no account mutation tools.', {}, () => ({ data: sources }));
   addTool(server, 'singapore_find_relevant_tools', 'Route a question in French or English to tools and datasets. Deterministic keyword matching; suggestions are not evidence or computed facts. Search catalog with English keywords.', { question: z.string().min(1).max(1000), limit: limitSchema }, ({ question, limit }) => {
     const matches = routeQuestion(question);

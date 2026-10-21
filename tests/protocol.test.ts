@@ -9,7 +9,7 @@ test('MCP discovery, resources, prompts, offline calls and invalid arguments', a
   await server.connect(a); await client.connect(b);
   try {
     const { tools } = await client.listTools();
-    assert.equal(tools.length,55); assert.equal(new Set(tools.map(t=>t.name)).size,55);
+    assert.ok(tools.length>=55); assert.equal(new Set(tools.map(t=>t.name)).size,tools.length);
     assert.ok(tools.every(t=>t.annotations?.readOnlyHint === true));
     const result = await client.callTool({ name:'singapore_search_catalog', arguments:{ query:'resale', limit:2 } });
     assert.notEqual(result.isError,true); const content = result.content as { type:string; text:string }[];

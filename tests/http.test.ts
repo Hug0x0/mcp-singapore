@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { HttpClient, ApiError, url } from '../src/http.js';
-const origin = 'https://data.gov.sg/api/action/datastore_search';
+const origin = 'https://data.gov.sg/test-http';
 test('encodes filters and text without changing parameter boundaries', () => {
   const result = url(origin, { filters: { town: "A&B'" }, q: { name: 'x=1&limit=9000' }, limit: 1, absent: undefined });
   assert.equal(result.searchParams.get('filters'), JSON.stringify({ town: "A&B'" }));
