@@ -27,7 +27,7 @@ jobs:
           DATA_GOV_SG_API_KEY: ${{ secrets.DATA_GOV_SG_API_KEY }}
           LTA_ACCOUNT_KEY: ${{ secrets.LTA_ACCOUNT_KEY }}
           ONEMAP_TOKEN: ${{ secrets.ONEMAP_TOKEN }}
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: provider-verification

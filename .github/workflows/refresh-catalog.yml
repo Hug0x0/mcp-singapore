@@ -34,7 +34,7 @@ jobs:
             git push origin "$branch"
             gh pr create --base main --head "$branch" --title "Refresh Singapore data catalog" --body "Updates the catalog, curated metadata and generated documentation after integrity and schema checks. Review the catalog refresh report before merging."
           fi
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: catalog-refresh-report
