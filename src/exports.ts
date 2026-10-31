@@ -1,4 +1,4 @@
-import{setTimeout as delay}from'node:timers/promises';import{http,dataGovHeaders,ApiError}from'./http.js';import{requestContext,recordSource}from'./context.js';import{VERSION}from'./version.js';import type{Row}from'./types.js';
+import{setTimeout as delay}from'node:timers/promises';import{http,dataGovHeaders,ApiError,shutdownSignal}from'./http.js';import{requestContext,recordSource}from'./context.js';import{VERSION}from'./version.js';import type{Row}from'./types.js';
 export type ExportState='initiated'|'pending'|'ready'|'failed';
 export function normalizeExport(body:Row,action:'initiate'|'poll'){
  const data=body.data as Row|undefined;if(!data)throw new ApiError('Invalid export envelope',undefined,undefined,'INVALID_RESPONSE');
@@ -20,12 +20,14 @@ export function validateExportUrl(raw:string,id:string):URL{
 }
 const MAX_BYTES=64*1024*1024;const cache=new Map<string,{buffer:Buffer;expires:number;fetched:number}>();const pending=new Map<string,Promise<Buffer>>();
 export async function readTrustedExport(id:string,readyUrl:string,fetcher:typeof fetch=fetch,maxBytes=MAX_BYTES):Promise<Buffer>{
- const target=validateExportUrl(readyUrl,id);const signal=requestContext.getStore()?.signal;const deadline=signal?AbortSignal.any([signal,AbortSignal.timeout(60000)]):AbortSignal.timeout(60000);
+ const target=validateExportUrl(readyUrl,id);const signal=requestContext.getStore()?.signal;const deadline=AbortSignal.any([shutdownSignal,...(signal?[signal]:[]),AbortSignal.timeout(60000)]);
+ try{
  const response=await fetcher(target,{headers:{'User-Agent':`mcp-singapore/${VERSION}`},redirect:'error',signal:deadline});
  if(!response.ok){await response.body?.cancel();throw new ApiError(`Export storage returned HTTP ${response.status}`,response.status);}
  if(Number(response.headers.get('content-length'))>maxBytes){await response.body?.cancel();throw new ApiError('Dataset export exceeds the download byte budget',undefined,undefined,'OUTPUT_TOO_LARGE');}
  const reader=response.body?.getReader();if(!reader)throw new ApiError('Empty dataset export',undefined,undefined,'INVALID_RESPONSE');let size=0;const chunks:Uint8Array[]=[];
  for(;;){deadline.throwIfAborted();const p=await reader.read();if(p.done)break;size+=p.value.byteLength;if(size>maxBytes){await reader.cancel();throw new ApiError('Dataset export exceeds the download byte budget',undefined,undefined,'OUTPUT_TOO_LARGE');}chunks.push(p.value);}return Buffer.concat(chunks);
+ }catch(error){if(deadline.aborted)throw new ApiError(signal?.aborted||shutdownSignal.aborted?'Export cancelled':'Export deadline exceeded',undefined,undefined,signal?.aborted||shutdownSignal.aborted?'CANCELLED':'NETWORK_TIMEOUT');throw error;}
 }
 export async function datasetBuffer(id:string):Promise<Buffer>{
  const now=Date.now();for(const[k,c]of cache)if(c.expires<=now)cache.delete(k);const saved=cache.get(id);

@@ -1,26 +1,26 @@
-# Configuration et résultats
+# Configuration and results
 
-Le serveur lit sa configuration au démarrage et refuse une valeur invalide, sans en afficher le contenu. Node.js 22.12+ est recommandé ; la matrice CI utilise Node 22 et 24.
+Configuration is read at startup. Invalid values are rejected without printing their contents. Node.js 22.12 or later is required; CI tests Node 22 and 24.
 
-| Variable | Défaut | Usage |
+| Variable | Default | Purpose |
 |---|---:|---|
-| MCP_SG_OUTPUT_BYTES | 120000 | Budget de sortie MCP ; aucune troncature JSON silencieuse |
-| MCP_SG_HTTP_BYTES | 8388608 | Taille maximale de réponse JSON amont |
-| MCP_SG_CACHE_BYTES | 20971520 | Budget mémoire des valeurs du cache |
-| MCP_SG_CACHE_ENTRIES | 128 | Nombre maximal d'entrées du cache |
-| MCP_SG_CACHE_TTL_SECONDS | non défini | Remplace les TTL spécifiques des outils ; 0 désactive le cache |
-| MCP_SG_TIMEOUT_MS | 30000 | Délai total incluant attente de débit, téléchargement et retries |
-| MCP_SG_QUEUE_LIMIT | 50 | Nombre maximal d'attentes de régulation simultanées |
-| MCP_SG_QUEUE_WAIT_MS | 20000 | Attente maximale avant rejet QUEUE_FULL |
-| DATA_GOV_SG_TIER | public | public/dev/prod ; dev et prod exigent une clé data.gov.sg |
-| MCP_SG_STALE_DAYS | 730 | Seuil d'avertissement pour une publication ancienne |
+| MCP_SG_OUTPUT_BYTES | 120000 | MCP output budget; JSON is never silently cut |
+| MCP_SG_HTTP_BYTES | 8388608 | Maximum upstream JSON response size |
+| MCP_SG_CACHE_BYTES | 20971520 | Budget for cached response values |
+| MCP_SG_CACHE_ENTRIES | 128 | Maximum cache entry count |
+| MCP_SG_CACHE_TTL_SECONDS | unset | Override tool-specific TTLs; 0 disables caching |
+| MCP_SG_TIMEOUT_MS | 30000 | Total HTTP deadline including rate waits and retries |
+| MCP_SG_QUEUE_LIMIT | 50 | Maximum concurrent rate-limit waits |
+| MCP_SG_QUEUE_WAIT_MS | 20000 | Maximum wait before QUEUE_FULL |
+| DATA_GOV_SG_TIER | public | public/dev/prod; dev and prod require a data.gov.sg key |
+| MCP_SG_STALE_DAYS | 730 | Publication-age warning threshold |
 
-Les plafonds du fournisseur restent applicables et peuvent changer. Le niveau n'est jamais déduit de la simple présence d'une clé. Les flux transport v1 gardent une cadence conservatrice indépendante du niveau v2.
+Provider quotas still apply and may change. A higher tier is never inferred from the presence of a key. Public transport v1 feeds retain a conservative rate independent of the v2 tier.
 
-Chaque succès expose `ok`, `served_at`, `data` et `sources`. Chaque source HTTP contient `source_url`, `fetched_at`, `cache_hit` et `age_seconds`. `served_at` est l'heure d'émission, `fetched_at` l'heure de téléchargement ; les timestamps d'observation restent ceux du fournisseur. Une réponse d'un autre processus n'utilise pas le cache de celui-ci.
+Successful results expose `ok`, `served_at`, `data`, and `sources`. Each HTTP source includes `source_url`, `fetched_at`, `cache_hit`, and `age_seconds`. Emission time is distinct from download time and provider observation time. Caches are local to a server process.
 
-`structuredContent` et le contenu texte JSON représentent le même résultat. Une erreur contient `ok: false`, `error_code`, un message et éventuellement fournisseur, statut HTTP et délai de retry. Les erreurs d'arguments validées par le SDK peuvent suivre son format MCP standard.
+`structuredContent` and JSON text represent the same result. Errors include `ok:false`, `error_code`, a message, and optional provider, HTTP status, and retry delay. Argument validation performed by the SDK may use its standard MCP error format.
 
-Codes : INVALID_ARGUMENT, AUTH_REQUIRED, AUTH_FAILED, RATE_LIMITED, UPSTREAM_UNAVAILABLE, UPSTREAM_ERROR, INVALID_RESPONSE, NETWORK_TIMEOUT, CANCELLED, QUEUE_FULL, OUTPUT_TOO_LARGE, INCOMPLETE_DATA, EXPORT_PENDING, NOT_FOUND.
+Error codes: INVALID_ARGUMENT, AUTH_REQUIRED, AUTH_FAILED, RATE_LIMITED, UPSTREAM_UNAVAILABLE, UPSTREAM_ERROR, INVALID_RESPONSE, NETWORK_TIMEOUT, CANCELLED, QUEUE_FULL, OUTPUT_TOO_LARGE, INCOMPLETE_DATA, EXPORT_PENDING, NOT_FOUND.
 
-En cas de dépassement du budget de sortie, réduire les limites/projections ou utiliser l'export. Les caches ne contiennent que des valeurs de réponse, sont bornés en octets et en entrées, et sont purgés à l'expiration. Les compteurs de diagnostic ne contiennent ni paramètres de clé ni valeurs d'en-têtes.
+For oversized output, reduce limits or projections, add filters, or use an export. Caches are bounded by response bytes and entry count and are purged after expiration. Diagnostics never include credential values or sensitive headers.

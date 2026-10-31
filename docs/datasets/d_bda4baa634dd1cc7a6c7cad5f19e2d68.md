@@ -1,0 +1,111 @@
+# Dates of Hawker Centres Closure
+
+[Browse dataset guides](README.md) · [Server setup](../../README.md#install-from-source)
+
+Official dataset: [data.gov.sg](https://data.gov.sg/datasets/d_bda4baa634dd1cc7a6c7cad5f19e2d68/view).
+
+| Catalog field | Snapshot value |
+|---|---|
+| Dataset ID | `d_bda4baa634dd1cc7a6c7cad5f19e2d68` |
+| Publishing agency | National Environment Agency |
+| Format | CSV |
+| Status | active |
+| Provider update timestamp | 2026-10-19T13:47:11+08:00 |
+| Coverage start | 2026-01-01T00:00:00+08:00 |
+| Coverage end | 2026-12-31T23:59:59+08:00 |
+| Catalog retrieved at | 2026-10-21T15:17:51.033Z |
+
+These values describe the bundled catalog snapshot. Inspect live metadata before relying on coverage, availability, field names, or freshness. A recent update timestamp can refer to a revision of historical data.
+
+## Publisher description
+
+Which hawker centres are closed for cleaning? Explore NEA’s official 2025 closure schedule on Singapore’s open data platform, and download the CSV at data.gov.sg.
+
+Description excerpt from the bundled provider metadata; consult the official dataset for complete definitions, footnotes, and terms.
+
+## Inspect before querying
+
+MCP tool call (tool name and arguments):
+
+```json
+{
+  "name": "singapore_inspect_dataset",
+  "arguments": {
+    "dataset_id": "d_bda4baa634dd1cc7a6c7cad5f19e2d68",
+    "fields_limit": 50,
+    "fields_offset": 0
+  }
+}
+```
+
+Read the returned field identifiers, units, missing-value conventions, and coverage. If more fields are available, follow the returned pagination. Use the returned column names when constructing filters or projections.
+
+## Request a small sample
+
+For datasets supported by the provider datastore, start with a bounded page:
+
+```json
+{
+  "name": "singapore_query_dataset",
+  "arguments": {
+    "dataset_id": "d_bda4baa634dd1cc7a6c7cad5f19e2d68",
+    "limit": 5,
+    "offset": 0
+  }
+}
+```
+
+Inspect the response pagination before requesting another page. A sample is not a full dataset summary. CSV format alone does not guarantee datastore availability; use an export if the provider rejects record queries.
+
+## Specialized tool
+
+This dataset also has the `singapore_query_hawker_closures` tool in the food topic. It accepts the same query options without a dataset ID:
+
+```json
+{
+  "name": "singapore_query_hawker_closures",
+  "arguments": {
+    "limit": 5,
+    "offset": 0
+  }
+}
+```
+
+## Export workflow
+
+Use an export when the datastore is unavailable or a complete offline analysis is needed.
+
+```json
+{
+  "name": "singapore_download_dataset",
+  "arguments": {
+    "dataset_id": "d_bda4baa634dd1cc7a6c7cad5f19e2d68",
+    "action": "initiate"
+  }
+}
+```
+
+If the result is pending, poll on a later call:
+
+```json
+{
+  "name": "singapore_download_dataset",
+  "arguments": {
+    "dataset_id": "d_bda4baa634dd1cc7a6c7cad5f19e2d68",
+    "action": "poll"
+  }
+}
+```
+
+Wait for a ready result before using its download URL. URLs may expire. The tool returns export status and a URL; it does not load the entire exported file into the conversation. Provider availability and quota limits still apply.
+
+## Suggested request
+
+> Inspect dataset d_bda4baa634dd1cc7a6c7cad5f19e2d68 (Dates of Hawker Centres Closure). Explain its coverage, publisher definitions, and available fields. Retrieve five sample records if datastore access is supported. Cite the source and distinguish historical observations from current conditions.
+
+## Interpretation
+
+- Preserve provider units and missing values; do not interpret missing observations as zero.
+- Check definitions and population coverage before comparing this dataset with another series.
+- Attribute the publishing agency and retain source URLs and observation dates in any analysis.
+- This guide contains metadata and request examples. Live record access and export completion have not been verified by generating this page.

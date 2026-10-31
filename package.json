@@ -30,10 +30,11 @@
     "refresh:catalog": "node scripts/refresh-catalog.mjs",
     "prepack": "npm run build",
     "prepublishOnly": "npm run build && npm test",
-    "docs:generate": "node scripts/generate-docs.mjs",
-    "docs:check": "node scripts/generate-docs.mjs --check",
+    "docs:generate": "node scripts/generate-docs.mjs && node scripts/dataset-guides.mjs",
+    "docs:check": "node scripts/generate-docs.mjs --check && node scripts/dataset-guides.mjs --check",
     "check:schema": "node scripts/check-schema.mjs",
-    "test:package": "node scripts/test-package.mjs"
+    "test:package": "node scripts/test-package.mjs",
+    "docs:datasets": "node scripts/dataset-guides.mjs"
   },
   "keywords": [
     "mcp",

@@ -1,18 +1,18 @@
-# Exemples de questions
+# Example questions
 
-- Quels appartements HDB de 4 pièces ont été revendus récemment à Ang Mo Kio ? Donne les dates et prix en SGD.
-- Cherche les écoles de Raffles et leurs adresses.
-- Quels hawker centres sont fermés pour nettoyage ? Vérifie les dates avant de conclure.
-- Compare la population et le PIB de Singapour avec la Malaisie et la France, en citant les périodes.
-- Quelles statistiques SingStat existent sur les revenus des ménages et le chômage ?
-- Quelles stations météo signalent de la pluie et quelles sont les prévisions à deux heures ?
-- Trouve des jeux sur les dépenses publiques, l'électricité, les déchets ou le commerce extérieur.
-- Quels taxis sont disponibles dans un rayon de 2 km autour de 1.283, 103.86 ?
-- Trouve les différentes partitions du registre détaillé ACRA via le catalogue et la collection 2.
-- Cherche les couches géographiques des parcs et les liens d'export correspondants.
+- Which four-room HDB flats were recently resold in Ang Mo Kio? Include dates and prices in SGD.
+- Find Raffles schools and their addresses.
+- Which hawker centres are closed for cleaning? Check closure dates before drawing conclusions.
+- Compare Singapore's population and GDP with Malaysia and Australia using comparable periods.
+- Find SingStat tables covering household incomes and unemployment.
+- Which weather stations report rainfall, and what is the two-hour forecast?
+- Find datasets covering government spending, electricity, waste, or foreign trade.
+- Which taxis are available within 2 km of 1.283, 103.86?
+- Find detailed ACRA registry partitions using the catalog and collection 2.
+- Find park geographic layers and their export links.
 
-Avec les identifiants correspondants :
+With the appropriate credentials:
 
-- Quels sont les prochains bus à l'arrêt 01012 ?
-- Géocode le code postal 018956 avec OneMap.
-- Consulte les incidents routiers et alertes d'inondation via LTA.
+- What are the next buses at stop 01012?
+- Geocode postal code 018956 with OneMap.
+- Retrieve road incidents and flood alerts through LTA.

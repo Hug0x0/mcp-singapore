@@ -1,0 +1,74 @@
+# Amendment to Master Plan 2019 Monument Number layer
+
+[Browse dataset guides](README.md) · [Server setup](../../README.md#install-from-source)
+
+Official dataset: [data.gov.sg](https://data.gov.sg/datasets/d_2c52ac8273c0facfba2be8121d9aee97/view).
+
+| Catalog field | Snapshot value |
+|---|---|
+| Dataset ID | `d_2c52ac8273c0facfba2be8121d9aee97` |
+| Publishing agency | Urban Redevelopment Authority |
+| Format | GEOJSON |
+| Status | active |
+| Provider update timestamp | 2024-06-06T14:29:05+08:00 |
+| Coverage start | Not supplied |
+| Coverage end | Not supplied |
+| Catalog retrieved at | 2026-10-21T15:17:51.033Z |
+
+These values describe the bundled catalog snapshot. Inspect live metadata before relying on coverage, availability, field names, or freshness. A recent update timestamp can refer to a revision of historical data.
+
+## Inspect before querying
+
+MCP tool call (tool name and arguments):
+
+```json
+{
+  "name": "singapore_inspect_dataset",
+  "arguments": {
+    "dataset_id": "d_2c52ac8273c0facfba2be8121d9aee97",
+    "fields_limit": 50,
+    "fields_offset": 0
+  }
+}
+```
+
+Read the returned field identifiers, units, missing-value conventions, and coverage. If more fields are available, follow the returned pagination. Use the returned column names when constructing filters or projections.
+
+## Export workflow
+
+The snapshot advertises GEOJSON. Inspect metadata and use the provider export workflow; do not assume tabular query support.
+
+```json
+{
+  "name": "singapore_download_dataset",
+  "arguments": {
+    "dataset_id": "d_2c52ac8273c0facfba2be8121d9aee97",
+    "action": "initiate"
+  }
+}
+```
+
+If the result is pending, poll on a later call:
+
+```json
+{
+  "name": "singapore_download_dataset",
+  "arguments": {
+    "dataset_id": "d_2c52ac8273c0facfba2be8121d9aee97",
+    "action": "poll"
+  }
+}
+```
+
+Wait for a ready result before using its download URL. URLs may expire. The tool returns export status and a URL; it does not load the entire exported file into the conversation. Provider availability and quota limits still apply.
+
+## Suggested request
+
+> Inspect dataset d_2c52ac8273c0facfba2be8121d9aee97 (Amendment to Master Plan 2019 Monument Number layer). Explain its coverage, publisher definitions, and available fields. Explain the available export format. Cite the source and distinguish historical observations from current conditions.
+
+## Interpretation
+
+- Preserve provider units and missing values; do not interpret missing observations as zero.
+- Check definitions and population coverage before comparing this dataset with another series.
+- Attribute the publishing agency and retain source URLs and observation dates in any analysis.
+- This guide contains metadata and request examples. Live record access and export completion have not been verified by generating this page.
