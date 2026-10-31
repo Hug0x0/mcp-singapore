@@ -2619,7 +2619,7 @@
     },
     {
       "name": "singapore_find_relevant_tools",
-      "description": "Route a question in French or English to tools and datasets. Deterministic keyword matching; suggestions are not evidence or computed facts. Search catalog with English keywords.",
+      "description": "Route an English question to tools and datasets. Deterministic keyword matching; suggestions are not evidence or computed facts. Search catalog with English keywords.",
       "inputSchema": {
         "type": "object",
         "properties": {

@@ -11,11 +11,11 @@ export const queryShape = {
   fields: z.array(z.string().min(1).max(120)).max(50).optional(), sort: z.string().max(500).optional().describe('e.g. month desc, resale_price desc; inspect fields first'),
   limit: limitSchema, offset: offsetSchema,
 };
-const translations:Record<string,string>={ecole:'school',ecoles:'school',logement:'housing',loyer:'rent',loyers:'rent',entreprise:'ACRA',entreprises:'ACRA',sante:'health',tourisme:'tourism',dechets:'waste',eau:'water',energie:'energy',population:'population',pib:'gross domestic product',chomage:'unemployment',revenus:'income',revenu:'income',inflation:'consumer price',musees:'museum',bibliotheque:'library'};
-export function translatedQuery(query:string){return normalize(query).split(/\s+/).map(t=>translations[t]??t).join(' ');}
+const keywordExpansions:Record<string,string>={gdp:'gross domestic product',inflation:'consumer price',companies:'ACRA',businesses:'ACRA',schools:'school',rents:'rent',museums:'museum',libraries:'library'};
+export function expandedQuery(query:string){return normalize(query).split(/\s+/).map(t=>keywordExpansions[t]??t).join(' ');}
 export interface CatalogFilters{status?:string;coverage_year?:number;updated_since?:string;include_unknown_coverage?:boolean}
 export function searchCatalog(query='',agency='',format='',filters:CatalogFilters={}){
-  const terms=translatedQuery(query).split(/\s+/).filter(Boolean);
+  const terms=expandedQuery(query).split(/\s+/).filter(Boolean);
   return snapshot.datasets.filter(d=>{
     const combined=normalize(`${d.title} ${d.description??''} ${d.agency??''}`);
     const unknown=!d.coverage_start||!d.coverage_end;

@@ -1,0 +1,97 @@
+# ARS Directory
+
+[Browse dataset guides](README.md) · [Server setup](../../README.md#install-from-source)
+
+Official dataset: [data.gov.sg](https://data.gov.sg/datasets/d_f87cdeb2e37b6469bfc115b59aae3ead/view).
+
+| Catalog field | Snapshot value |
+|---|---|
+| Dataset ID | `d_f87cdeb2e37b6469bfc115b59aae3ead` |
+| Publishing agency | Majlis Ugama Islam Singapura |
+| Format | CSV |
+| Status | active |
+| Provider update timestamp | 2026-10-16T16:36:01+08:00 |
+| Coverage start | Not supplied |
+| Coverage end | Not supplied |
+| Catalog retrieved at | 2026-10-21T15:17:51.033Z |
+
+These values describe the bundled catalog snapshot. Inspect live metadata before relying on coverage, availability, field names, or freshness. A recent update timestamp can refer to a revision of historical data.
+
+## Publisher description
+
+A directory and listing of all ARS-certified asatizah, comprising their names and categories (i.e. Tier 1 or Tier 2 Quranic Teacher).
+
+Description excerpt from the bundled provider metadata; consult the official dataset for complete definitions, footnotes, and terms.
+
+## Inspect before querying
+
+MCP tool call (tool name and arguments):
+
+```json
+{
+  "name": "singapore_inspect_dataset",
+  "arguments": {
+    "dataset_id": "d_f87cdeb2e37b6469bfc115b59aae3ead",
+    "fields_limit": 50,
+    "fields_offset": 0
+  }
+}
+```
+
+Read the returned field identifiers, units, missing-value conventions, and coverage. If more fields are available, follow the returned pagination. Use the returned column names when constructing filters or projections.
+
+## Request a small sample
+
+For datasets supported by the provider datastore, start with a bounded page:
+
+```json
+{
+  "name": "singapore_query_dataset",
+  "arguments": {
+    "dataset_id": "d_f87cdeb2e37b6469bfc115b59aae3ead",
+    "limit": 5,
+    "offset": 0
+  }
+}
+```
+
+Inspect the response pagination before requesting another page. A sample is not a full dataset summary. CSV format alone does not guarantee datastore availability; use an export if the provider rejects record queries.
+
+## Export workflow
+
+Use an export when the datastore is unavailable or a complete offline analysis is needed.
+
+```json
+{
+  "name": "singapore_download_dataset",
+  "arguments": {
+    "dataset_id": "d_f87cdeb2e37b6469bfc115b59aae3ead",
+    "action": "initiate"
+  }
+}
+```
+
+If the result is pending, poll on a later call:
+
+```json
+{
+  "name": "singapore_download_dataset",
+  "arguments": {
+    "dataset_id": "d_f87cdeb2e37b6469bfc115b59aae3ead",
+    "action": "poll"
+  }
+}
+```
+
+Wait for a ready result before using its download URL. URLs may expire. The tool returns export status and a URL; it does not load the entire exported file into the conversation. Provider availability and quota limits still apply.
+
+## Suggested request
+
+> Inspect dataset d_f87cdeb2e37b6469bfc115b59aae3ead (ARS Directory). Explain its coverage, publisher definitions, and available fields. Retrieve five sample records if datastore access is supported. Cite the source and distinguish historical observations from current conditions.
+
+## Interpretation
+
+- Preserve provider units and missing values; do not interpret missing observations as zero.
+- Check definitions and population coverage before comparing this dataset with another series.
+- Attribute the publishing agency and retain source URLs and observation dates in any analysis.
+- This guide contains metadata and request examples. Live record access and export completion have not been verified by generating this page.

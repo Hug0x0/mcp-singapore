@@ -21,8 +21,8 @@ test('catalog searches all keywords, publisher and format', () => {
   const results = searchCatalog('', 'Education', 'CSV'); assert.ok(results.length > 0);
   assert.ok(results.every(d => d.agency?.includes('Education') && d.format === 'CSV'));
 });
-test('routes French questions with accents and English questions', () => {
-  assert.ok(routeQuestion('Quel temps et météo à Singapour ?').flatMap(r => r.tools).includes('singapore_get_forecast_2h'));
+test('routes English weather and housing questions', () => {
+  assert.ok(routeQuestion('What is the weather in Singapore?').flatMap(r => r.tools).includes('singapore_get_forecast_2h'));
   assert.ok(routeQuestion('Compare HDB resale prices').flatMap(r => r.tools).includes('singapore_query_hdb_resale'));
   assert.equal(routeQuestion('xyzzy').length, 0);
 });

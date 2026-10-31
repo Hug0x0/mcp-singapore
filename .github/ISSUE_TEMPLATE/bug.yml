@@ -1,21 +1,21 @@
-name: Bug
-description: Signaler un comportement reproductible
+name: Bug report
+description: Report reproducible unexpected behavior
 labels: [bug]
 body:
   - type: textarea
     id: reproduction
     attributes:
-      label: Reproduction et résultat observé
-      description: Version, outil, paramètres sans secrets, résultat attendu et obtenu.
+      label: Reproduction, expected result, and actual result
+      description: Include the version, tool, and arguments without credentials.
     validations:
       required: true
   - type: textarea
     id: source
     attributes:
-      label: Source et périmètre
-      description: URL officielle, dates de couverture, page ou échantillon concerné.
+      label: Source and coverage
+      description: Include official URLs, coverage dates, pages, or sample limitations.
   - type: textarea
     id: validation
     attributes:
-      label: Éléments de diagnostic
-      description: Message d'erreur nettoyé, environnement Node/client MCP. Ne joindre aucune clé.
+      label: Diagnostic information
+      description: Include sanitized error messages and the Node/MCP client environment. Do not include secrets.

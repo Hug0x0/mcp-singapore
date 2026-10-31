@@ -1,0 +1,97 @@
+# Average Days Of Sick Leave Taken - Industry (Level 3)
+
+[Browse dataset guides](README.md) · [Server setup](../../README.md#install-from-source)
+
+Official dataset: [data.gov.sg](https://data.gov.sg/datasets/d_aabbf079b16af63eccf483c18984ac5e/view).
+
+| Catalog field | Snapshot value |
+|---|---|
+| Dataset ID | `d_aabbf079b16af63eccf483c18984ac5e` |
+| Publishing agency | Ministry of Manpower |
+| Format | CSV |
+| Status | active |
+| Provider update timestamp | 2026-06-30T15:09:12+08:00 |
+| Coverage start | 2007-01-01T00:00:00+08:00 |
+| Coverage end | 2023-12-31T23:59:59+08:00 |
+| Catalog retrieved at | 2026-10-21T15:17:51.033Z |
+
+These values describe the bundled catalog snapshot. Inspect live metadata before relying on coverage, availability, field names, or freshness. A recent update timestamp can refer to a revision of historical data.
+
+## Publisher description
+
+Source: Conditions of Employment Survey, Manpower Research and Statistics Department, MOM Notes: (1) Data pertain to private sector establishments each with at least 25 employees and the public sector. (2) Data are available biennially. (3) 's': Data suppressed due to small number of observations.
+
+Description excerpt from the bundled provider metadata; consult the official dataset for complete definitions, footnotes, and terms.
+
+## Inspect before querying
+
+MCP tool call (tool name and arguments):
+
+```json
+{
+  "name": "singapore_inspect_dataset",
+  "arguments": {
+    "dataset_id": "d_aabbf079b16af63eccf483c18984ac5e",
+    "fields_limit": 50,
+    "fields_offset": 0
+  }
+}
+```
+
+Read the returned field identifiers, units, missing-value conventions, and coverage. If more fields are available, follow the returned pagination. Use the returned column names when constructing filters or projections.
+
+## Request a small sample
+
+For datasets supported by the provider datastore, start with a bounded page:
+
+```json
+{
+  "name": "singapore_query_dataset",
+  "arguments": {
+    "dataset_id": "d_aabbf079b16af63eccf483c18984ac5e",
+    "limit": 5,
+    "offset": 0
+  }
+}
+```
+
+Inspect the response pagination before requesting another page. A sample is not a full dataset summary. CSV format alone does not guarantee datastore availability; use an export if the provider rejects record queries.
+
+## Export workflow
+
+Use an export when the datastore is unavailable or a complete offline analysis is needed.
+
+```json
+{
+  "name": "singapore_download_dataset",
+  "arguments": {
+    "dataset_id": "d_aabbf079b16af63eccf483c18984ac5e",
+    "action": "initiate"
+  }
+}
+```
+
+If the result is pending, poll on a later call:
+
+```json
+{
+  "name": "singapore_download_dataset",
+  "arguments": {
+    "dataset_id": "d_aabbf079b16af63eccf483c18984ac5e",
+    "action": "poll"
+  }
+}
+```
+
+Wait for a ready result before using its download URL. URLs may expire. The tool returns export status and a URL; it does not load the entire exported file into the conversation. Provider availability and quota limits still apply.
+
+## Suggested request
+
+> Inspect dataset d_aabbf079b16af63eccf483c18984ac5e (Average Days Of Sick Leave Taken - Industry (Level 3)). Explain its coverage, publisher definitions, and available fields. Retrieve five sample records if datastore access is supported. Cite the source and distinguish historical observations from current conditions.
+
+## Interpretation
+
+- Preserve provider units and missing values; do not interpret missing observations as zero.
+- Check definitions and population coverage before comparing this dataset with another series.
+- Attribute the publishing agency and retain source URLs and observation dates in any analysis.
+- This guide contains metadata and request examples. Live record access and export completion have not been verified by generating this page.
